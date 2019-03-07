@@ -1,0 +1,11 @@
+p= link_to 'Ask question', new_question_path
+
+h1= 'List of all questions'
+if @questions
+  table
+    tr
+      td= @questions.first.title
+      td= @questions.first.body
+else
+  p= 'Not questions'
+
