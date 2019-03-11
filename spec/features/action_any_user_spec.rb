@@ -44,12 +44,8 @@ feature 'Any user can', %q{
     expect(page).to have_content 'Show question'
     expect(page).to have_content 'MyString'
 
-    # save_and_open_page
-
     expect(page).to have_content 'Show answers'
     expect(page).to have_content 'MyTextAnswer'
   end
 
-  scenario 'only authenticate user can create questions and answers'
-  scenario 'author can delete own question or answer, but can not delete another question/answer'
 end

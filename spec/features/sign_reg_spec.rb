@@ -33,7 +33,8 @@ feature 'User can sign in', %q{
     fill_in 'Email', with: 'new_user@test.com'
     fill_in 'Password', with: '12345678'
     fill_in 'Password confirmation', with: '12345678'
-    click_on 'Sign up'
+    click_button 'Sign up'
+
     expect(page).to have_content 'Welcome! You have signed up successfully.'
   end
 
