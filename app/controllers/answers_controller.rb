@@ -1,4 +1,6 @@
 class AnswersController < ApplicationController
+  before_action :authenticate_user!, except: [:show]
+
   before_action :set_question, only: [:new, :create]
   before_action :set_answer, only: [:show, :edit, :update, :destroy]
 
@@ -12,10 +14,11 @@ class AnswersController < ApplicationController
 
   def create
     @answer = @question.answers.build(answer_params)
+    @answer.author_id = current_user.id
     if @answer.save
       redirect_to @question, notice: 'Your answer has been published.'
     else
-      render @question, notice: 'Your answer has not been published.'
+      redirect_to @question, notice: 'Your answer has not been published.'
     end
   end
 
@@ -28,17 +31,21 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    @answer.destroy
-    redirect_to admin_question_path(@answer.question)
+    if current_user.id == @answer.author_id
+      @answer.destroy
+      redirect_to question_path(@answer.question), notice: 'Your answer has been deleted.'
+    else
+      redirect_to question_path(@answer.question), notice: 'Your answer has not been deleted.'
+    end
   end
 
   private
-  def set_answer
-    @answer = Answer.find(params[:id])
-  end
-
   def set_question
     @question = Question.find(params[:question_id])
+  end
+
+  def set_answer
+    @answer = Answer.find(params[:id])
   end
 
   def answer_params
