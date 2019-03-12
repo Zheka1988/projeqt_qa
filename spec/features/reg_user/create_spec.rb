@@ -1,10 +1,9 @@
 require 'rails_helper'
 
-feature 'User can create/delete question/answer', %q{
+feature 'User can create question/answer', %q{
     In order to get answer from a communnity
     As an authenticated user
     I'd like to be able to ask the question and give an answer.
-    And also be able to delete your question/answer
 } do
   given(:user) { create(:user) }
   given(:question) { create :question, author: user }
@@ -50,19 +49,6 @@ feature 'User can create/delete question/answer', %q{
       expect(page).to have_content 'Your answer has not been published.'
     end
 
-    scenario 'delete question' do
-      visit questions_path
-      click_on 'Delete'
-
-      expect(page).to have_content 'Your question has been deleted.'
-    end
-
-    scenario 'delete answer' do
-      visit question_path(question)
-      click_on 'Delete'
-
-      expect(page).to have_content 'Your answer has been deleted.'
-    end
   end
 
   scenario 'Unauthenticated user tries to ask a question' do
