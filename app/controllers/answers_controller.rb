@@ -4,39 +4,27 @@ class AnswersController < ApplicationController
   before_action :set_question, only: [:new, :create]
   before_action :set_answer, only: [:show, :edit, :update, :destroy]
 
-  def show; end
-
   def edit; end
-
-  def new
-    @answer = @question.answers.new
-  end
 
   def create
     @answer = @question.answers.build(answer_params)
-    @answer.author_id = current_user.id
+    @answer.author = current_user
     if @answer.save
       redirect_to @question, notice: 'Your answer has been published.'
     else
-      redirect_to @question, notice: 'Your answer has not been published.'
-    end
-  end
-
-  def update
-    if @answer.update(answer_params)
-      redirect_to admin_answer_path(@answer)
-    else
-      render :edit
+      flash[:notice] = 'Your answer has not been published.'
+      render "questions/show"
     end
   end
 
   def destroy
-    if current_user.id == @answer.author_id
+    if current_user.author_of?(@answer.author_id)
       @answer.destroy
-      redirect_to question_path(@answer.question), notice: 'Your answer has been deleted.'
+      flash[:notice] = 'Your answer has been deleted.'
     else
-      redirect_to question_path(@answer.question), notice: 'Your answer has not been deleted.'
+      flash[:notice] = 'Your answer has not been deleted.'
     end
+    redirect_to question_path(@answer.question)
   end
 
   private

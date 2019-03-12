@@ -1,9 +1,9 @@
 tr
   td= question.title
   td= question.body
-  td= link_to "Edit", edit_question_path(question),
-                      data: {question_id: question.id}
   td= link_to "Show", question_path(question)
-  td= link_to "Delete", question_path(question),
-                        method: :delete,
-                        data: { confirm: 'You are sure' }
+  - if current_user && current_user.author_of?(question.author_id)
+    td= link_to "Edit", edit_question_path(question)
+    td= link_to "Delete", question_path(question),
+                          method: :delete,
+                          data: { confirm: 'You are sure' }
