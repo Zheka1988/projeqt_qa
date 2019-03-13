@@ -125,16 +125,16 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'DELETE #destroy' do
     let!(:question) { create :question, author: user }
     # other_user = User.create(email: "false@mail.ru", password: "12345678", password_confirmation: "12345678")
-    # other_user = FactoryBot.create(:user)
-    # let!(:question_false) { create :question, author: other_user }
+    other_user = FactoryBot.create(:user)
+    let!(:question_false) { create :question, author: other_user }
 
     it 'deletes the question if logged user is author' do
       expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
     end
 
-    # it 'deletes the question if user is not author' do
-    #   expect { delete :destroy, params: { id: question_false } }.to change(Question, :count).by(0)
-    # end
+    it 'deletes the question if user is not author' do
+      expect { delete :destroy, params: { id: question_false } }.to change(Question, :count).by(0)
+    end
 
     it 'redirect to index' do
       delete :destroy, params: { id: question }
