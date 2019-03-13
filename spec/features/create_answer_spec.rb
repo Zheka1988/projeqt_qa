@@ -4,9 +4,10 @@ feature 'User can create answer', %q{
   being on the question page,
   can write the answer to the question
 } do
+  # after (:all) {User.destroy_all}
   #Использовал данную запись т.к. FactoryBot помещает в тестовую базу данных usera, которая не очищается между тестами.
   #и как следствие выходит ошибка: "Validation failed: Email has already been taken"
-  given(:user) { user_create }
+  given(:user) { create(:user) }
   given(:question) { create :question, author: user }
 
   describe 'Authenticated user tries' do

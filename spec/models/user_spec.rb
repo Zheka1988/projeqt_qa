@@ -7,16 +7,17 @@ RSpec.describe User, type: :model do
   end
 
   describe "Methods" do
-    user_t = User.first
+    let(:user) { create(:user) }
     it "valid verification of authorship" do
-      question = FactoryBot.create(:question, author: user_t)
-      expect( user_t.author_of?(question) ).to eq true
+      question = FactoryBot.create(:question, author: user)
+      expect(user).to be_author_of(question)
     end
 
     it "invalid verification of authorship" do
-      user_f = User.create(email: "false@mail.ru", password: "12345678", password_confirmation: "12345678")
-      question = FactoryBot.create(:question, author: user_f)
-      expect( user_t.author_of?(question) ).to eq false
+      # other_user = User.create(email: "false@mail.ru", password: "12345678", password_confirmation: "12345678")
+      other_user = FactoryBot.create(:user)
+      question = FactoryBot.create(:question, author: other_user)
+      expect( user.author_of?(question) ).to eq false
     end
   end
 

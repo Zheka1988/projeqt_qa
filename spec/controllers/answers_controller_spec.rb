@@ -1,15 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  user = User.first
-  before { sign_in(user) }
-
+  let!(:user) { create(:user) }
   let(:question) { create :question, author: user }
   let(:answer) { create :answer, question: question, author:user }
+
+  before { sign_in(user) }
+  # after (:all) { User.destroy_all }
 
   describe 'POST #create' do
 
     context 'with valid data' do
+      it 'communication with logged in user is established' do
+        expect(answer.author_id).to eq user.id
+      end
+
       it 'saves a new answer in the database' do
         expect { post :create, params: { question_id: question, answer: attributes_for(:answer) } }.to change(Answer, :count).by(1)
       end
@@ -49,11 +54,18 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let!(:answer) { create :answer, question: question, author:user }
+    let!(:answer) { create :answer, question: question, author: user }
+    # other_user = User.create(email: "fallse@mail.ru", password: "12345678", password_confirmation: "12345678")
+    # other_user = FactoryBot.create(:user)
+    # let(:answer_false) { create :answer, question: question, author: other_user  }
 
-    it 'deletes the question' do
+    it 'deletes the question if logged user is author ' do
       expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
     end
+
+    # it 'deletes the question if user is not author ' do
+    #   expect { delete :destroy, params: { id: answer_false } }.to change(Answer, :count).by(0)
+    # end
 
     it 'redirect to index' do
       delete :destroy, params: { id: answer }

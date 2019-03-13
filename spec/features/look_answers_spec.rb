@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Any user can look answers', %q{
   Any user can look question and answers to it
 } do
-  given(:user) { user_create }
+  given(:user) { create(:user) }
   given(:question) { create :question, author: user }
 
   scenario 'look list answers' do

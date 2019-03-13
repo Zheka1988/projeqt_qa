@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  user = User.first
+  let!(:user) { create(:user) }
+  let(:question) { create :question, author: user }
+
   before { sign_in(user) }
-
-  let (:question) { create :question, author: user }
-
+  # after(:all) { User.destroy_all }
   describe 'GET #index' do
     let(:questions) { create_list :question, 3, author: user  }
 
@@ -58,6 +58,10 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'POST #create' do
     context 'with valid attributes' do
+      it 'communication with logged in user is established' do
+        expect(question.author_id).to eq user.id
+      end
+
       it 'saves a new question in the database' do
         expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
       end
@@ -120,10 +124,17 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'DELETE #destroy' do
     let!(:question) { create :question, author: user }
+    # other_user = User.create(email: "false@mail.ru", password: "12345678", password_confirmation: "12345678")
+    # other_user = FactoryBot.create(:user)
+    # let!(:question_false) { create :question, author: other_user }
 
-    it 'deletes the question' do
+    it 'deletes the question if logged user is author' do
       expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
     end
+
+    # it 'deletes the question if user is not author' do
+    #   expect { delete :destroy, params: { id: question_false } }.to change(Question, :count).by(0)
+    # end
 
     it 'redirect to index' do
       delete :destroy, params: { id: question }

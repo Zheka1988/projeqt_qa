@@ -4,7 +4,7 @@ feature 'User can delete questions', %q{
   Registered user can delete his question
 } do
 
-  given(:user) { user_create }
+  given(:user) { create(:user) }
   given!(:question) { create :question, author: user }
 
   scenario 'delete question' do

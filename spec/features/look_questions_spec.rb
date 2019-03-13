@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Any user can look questions', %q{
   Any user see the list of questions
 } do
-  given(:user) { user_create }
+  given(:user) { create(:user) }
 
   scenario 'look list questions' do
     FactoryBot.create_list(:question, 3, author: user)
