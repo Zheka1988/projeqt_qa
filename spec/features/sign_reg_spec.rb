@@ -5,7 +5,7 @@ feature 'User can sign in', %q{
  Log out,
  Register in the system
 } do
-  given(:user) { create(:user) }
+  given(:user) { user_create }
 
   scenario 'registered user tries sign in system' do
     sign_in(user)

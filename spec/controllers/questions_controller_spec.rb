@@ -1,10 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let (:question) { create(:question) }
+  user = User.first
+  before { sign_in(user) }
+
+  let (:question) { create :question, author: user }
 
   describe 'GET #index' do
-    let(:questions) {create_list(:question, 3) }
+    let(:questions) { create_list :question, 3, author: user  }
 
     before { get :index }
 
@@ -105,7 +108,7 @@ RSpec.describe QuestionsController, type: :controller do
       it 'does not change question' do
         question.reload
 
-        expect(question.title).to eq 'MyString'
+        expect(question.title).to have_text 'MyString'
         expect(question.body).to eq 'MyText'
       end
 
@@ -116,7 +119,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let!(:question) { create(:question) }
+    let!(:question) { create :question, author: user }
 
     it 'deletes the question' do
       expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)

@@ -1,8 +1,8 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, except: [:show]
+  before_action :authenticate_user!
 
-  before_action :set_question, only: [:new, :create]
-  before_action :set_answer, only: [:show, :edit, :update, :destroy]
+  before_action :set_question, only: [:create]
+  before_action :set_answer, only: [:edit, :destroy]
 
   def edit; end
 
@@ -18,7 +18,7 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    if current_user.author_of?(@answer.author_id)
+    if current_user.author_of?(@answer)
       @answer.destroy
       flash[:notice] = 'Your answer has been deleted.'
     else

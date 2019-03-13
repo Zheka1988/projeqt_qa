@@ -1,13 +1,11 @@
 require 'rails_helper'
 
-feature 'User can create question/answer', %q{
-    In order to get answer from a communnity
-    As an authenticated user
-    I'd like to be able to ask the question and give an answer.
+feature 'User can create question', %q{
+  being on the root page,
+  can write the question
 } do
-  given(:user) { create(:user) }
-  given(:question) { create :question, author: user }
-  given!(:answer) { create :answer, question: question, author: user }
+
+  given(:user) { user_create }
 
   describe 'Authenticated user' do
     background do
@@ -32,23 +30,6 @@ feature 'User can create question/answer', %q{
 
       expect(page).to have_content "Title can't be blank"
     end
-
-    scenario 'give answer' do
-
-      visit question_path(question)
-      fill_in 'Body', with: 'body answer'
-      click_on 'Reply'
-
-      expect(page).to have_content 'Your answer has been published.'
-      expect(page).to have_content 'body answer'
-    end
-
-    scenario 'give answer with errors' do
-      visit question_path(question)
-      click_on 'Reply'
-      expect(page).to have_content 'Your answer has not been published.'
-    end
-
   end
 
   scenario 'Unauthenticated user tries to ask a question' do

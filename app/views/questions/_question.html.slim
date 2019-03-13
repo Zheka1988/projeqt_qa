@@ -2,7 +2,7 @@ tr
   td= question.title
   td= question.body
   td= link_to "Show", question_path(question)
-  - if current_user && current_user.author_of?(question.author_id)
+  - if current_user&.author_of?(question)
     td= link_to "Edit", edit_question_path(question)
     td= link_to "Delete", question_path(question),
                           method: :delete,
