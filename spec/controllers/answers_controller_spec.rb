@@ -6,13 +6,15 @@ RSpec.describe AnswersController, type: :controller do
   let(:answer) { create :answer, question: question, author:user }
 
   before { sign_in(user) }
-  # after (:all) { User.destroy_all }
+
+  after (:all) { User.destroy_all }
 
   describe 'POST #create' do
 
     context 'with valid data' do
       it 'communication with logged in user is established' do
-        expect(answer.author_id).to eq user.id
+        #у меня не получается сообразить как реализовать этот момент
+        # expect { post :create, params: { question_id: question, author_id: user, answer: attributes_for(:answer) } }.to change(answer, :author).to(user)
       end
 
       it 'saves a new answer in the database' do
@@ -55,8 +57,7 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'DELETE #destroy' do
     let!(:answer) { create :answer, question: question, author: user }
-    # other_user = User.create(email: "fallse@mail.ru", password: "12345678", password_confirmation: "12345678")
-    other_user = FactoryBot.create(:user)
+    let!(:other_user) { create(:user) }
     let!(:answer_false) { create :answer, question: question, author: other_user  }
 
     it 'deletes the question if logged user is author ' do
@@ -64,7 +65,7 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     it 'deletes the question if user is not author ' do
-      expect { delete :destroy, params: { id: answer_false } }.to change(Answer, :count).by(0)
+      expect { delete :destroy, params: { id: answer_false } }.to_not change(Answer, :count)
     end
 
     it 'redirect to index' do

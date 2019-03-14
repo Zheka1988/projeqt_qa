@@ -14,7 +14,6 @@ RSpec.describe User, type: :model do
     end
 
     it "invalid verification of authorship" do
-      # other_user = User.create(email: "false@mail.ru", password: "12345678", password_confirmation: "12345678")
       other_user = FactoryBot.create(:user)
       question = FactoryBot.create(:question, author: other_user)
       expect( user.author_of?(question) ).to eq false
