@@ -3,18 +3,21 @@ require 'rails_helper'
 RSpec.describe AnswersController, type: :controller do
   let!(:user) { create(:user) }
   let(:question) { create :question, author: user }
-  let(:answer) { create :answer, question: question, author:user }
+  let(:answer) { create :answer, question: question, author: user }
 
   before { sign_in(user) }
 
   after (:all) { User.destroy_all }
 
   describe 'POST #create' do
-
     context 'with valid data' do
       it 'communication with logged in user is established' do
         #у меня не получается сообразить как реализовать этот момент
-        # expect { post :create, params: { question_id: question, author_id: user, answer: attributes_for(:answer) } }.to change(answer, :author).to(user)
+        # debugger
+        # post :create, params: { question_id: question, answer: attributes_for(:answer) }
+        # debugger
+        expect { post :create, params: { question_id: question,
+                answer: attributes_for(:answer) } }.to change(answer, :author_id).by(user.id)
       end
 
       it 'saves a new answer in the database' do
