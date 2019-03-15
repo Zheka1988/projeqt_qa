@@ -7,21 +7,15 @@ RSpec.describe AnswersController, type: :controller do
 
   before { sign_in(user) }
 
-  after (:all) { User.destroy_all }
-
   describe 'POST #create' do
     context 'with valid data' do
-      it 'communication with logged in user is established' do
-        #у меня не получается сообразить как реализовать этот момент
-        # debugger
-        # post :create, params: { question_id: question, answer: attributes_for(:answer) }
-        # debugger
-        expect { post :create, params: { question_id: question,
-                answer: attributes_for(:answer) } }.to change(answer, :author_id).by(user.id)
-      end
-
       it 'saves a new answer in the database' do
         expect { post :create, params: { question_id: question, answer: attributes_for(:answer) } }.to change(Answer, :count).by(1)
+      end
+
+      it 'communication with logged in user is established' do
+        post :create, params: { question_id: question, author_id: user, answer: attributes_for(:answer) }
+        expect(answer.author_id).to eq(user.id)
       end
 
       it 'the answer is related to the question' do

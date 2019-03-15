@@ -5,7 +5,7 @@ RSpec.describe QuestionsController, type: :controller do
   let(:question) { create :question, author: user }
 
   before { sign_in(user) }
-  # after(:all) { User.destroy_all }
+
   describe 'GET #index' do
     let(:questions) { create_list :question, 3, author: user  }
 
@@ -59,6 +59,7 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'POST #create' do
     context 'with valid attributes' do
       it 'communication with logged in user is established' do
+        post :create, params: { question: attributes_for(:question) }
         expect(question.author_id).to eq user.id
       end
 
