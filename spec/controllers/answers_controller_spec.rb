@@ -15,7 +15,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'communication with logged in user is established' do
         post :create, params: { question_id: question, author_id: user, answer: attributes_for(:answer) }
-        expect(answer.author_id).to eq(user.id)
+        expect(assigns(answer.author_id)).to eq(user.id)
       end
 
       it 'the answer is related to the question' do
