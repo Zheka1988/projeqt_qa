@@ -60,7 +60,7 @@ RSpec.describe QuestionsController, type: :controller do
     context 'with valid attributes' do
       it 'communication with logged in user is established' do
         post :create, params: { question: attributes_for(:question) }
-        expect(assigns(question.author_id)).to eq user.id
+        expect(assigns(:question).author_id).to eq user.id
       end
 
       it 'saves a new question in the database' do
