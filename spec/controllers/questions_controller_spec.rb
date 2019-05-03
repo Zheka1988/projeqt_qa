@@ -1,10 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let (:question) { create(:question) }
+  let!(:user) { create(:user) }
+  let(:question) { create :question, author: user }
+
+  before { sign_in(user) }
 
   describe 'GET #index' do
-    let(:questions) {create_list(:question, 3) }
+    let(:questions) { create_list :question, 3, author: user  }
 
     before { get :index }
 
@@ -55,6 +58,11 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'POST #create' do
     context 'with valid attributes' do
+      it 'communication with logged in user is established' do
+        post :create, params: { question: attributes_for(:question) }
+        expect(assigns(:question).author_id).to eq user.id
+      end
+
       it 'saves a new question in the database' do
         expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
       end
@@ -105,7 +113,7 @@ RSpec.describe QuestionsController, type: :controller do
       it 'does not change question' do
         question.reload
 
-        expect(question.title).to eq 'MyString'
+        expect(question.title).to have_text 'MyString'
         expect(question.body).to eq 'MyText'
       end
 
@@ -116,10 +124,16 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let!(:question) { create(:question) }
+    let!(:question) { create :question, author: user }
+    let!(:other_user) { create(:user) }
+    let!(:question_false) { create :question, author: other_user }
 
-    it 'deletes the question' do
+    it 'deletes the question if logged user is author' do
       expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+    end
+
+    it 'deletes the question if user is not author' do
+      expect { delete :destroy, params: { id: question_false } }.to_not change(Question, :count)
     end
 
     it 'redirect to index' do
