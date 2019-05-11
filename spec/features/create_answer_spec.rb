@@ -16,7 +16,7 @@ feature 'User can create answer', %q{
       visit question_path(question)
     end
 
-    scenario 'create answer' do
+    scenario 'create answer', js: true do
       expect(page).to have_content 'Show question'
       expect(page).to have_content 'MyText'
       expect(page).to have_content 'MyString'
@@ -24,14 +24,16 @@ feature 'User can create answer', %q{
       fill_in 'Body', with: 'answer answer answer'
       click_on 'Reply'
 
-      expect(page).to have_content 'Your answer has been published.'
-      expect(page).to have_content 'answer answer answer'
+      # expect(page).to have_content 'Your answer has been published.'
+      within '.answers' do # чтобы убедиться, что ответ в списке, а не в форме
+        expect(page).to have_content 'answer answer answer'
+      end
     end
 
-    scenario 'create answer with errors' do
+    scenario 'create answer with errors', js: true do
       click_on 'Reply'
 
-      expect(page).to have_content 'Your answer has not been published.'
+      # expect(page).to have_content 'Your answer has not been published.'
       expect(page).to have_content "Body can't be blank"
     end
   end

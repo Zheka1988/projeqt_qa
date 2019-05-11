@@ -4,15 +4,12 @@ h1= "Show question"
 h3= "Title: #{@question.title}"
 p
   b= "Body_Question: #{@question.body}"
-h1= "Create answer"
+
+.answers
+  - if @question.answers
+      table
+        == render @question.answers
 
 == render 'answers/new', resource: @question
-
-h2= "Show answers"
-- if @question.answers
-    table
-      == render @question.answers
-
-
 
 
