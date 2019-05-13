@@ -1,12 +1,16 @@
 p= link_to 'Ask question', new_question_path
 
-h1= 'List of all questions'
-- if @questions
-  table
-    tr
-      th= "Title"
-      th= "Body"
-      th colspan= "3" Action
-    = render @questions
+.question-errors
+  = render 'shared/errors', resource: @question
+
+.questions
+  h1= 'List of all questions'
+  - if @questions
+    table
+      tr
+        th= "Title"
+        th= "Body"
+        th colspan= "3" Action
+      = render @questions
 
 
