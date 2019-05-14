@@ -20,15 +20,16 @@ feature 'Author the question can shoose the best answer', %q{
     scenario 'author question, can choose best Answer', js: true do
       sign_in user
       visit question_path(question)
-      answer_best_id = Answer.second.id
-      class_for_check = ".answer-" + answer_best_id.to_s + "-best"
 
-      within class_for_check do
-        check 'answer_best'
+      id_for_check = 'tr#record-answer-' + Answer.second.id.to_s
+
+      within id_for_check do
+        click_on 'Best Answer'
       end
 
-      expect(page.find(class_for_check + " #answer_best")).to be_checked
-      expect(page).to have_field("answer_best", checked: true, count: 1)
+      expect(page).to have_link('Best Answer')
+      # expect(page).to have_css("tr:first", text: "#{text}")
+      expect("tr:first").to have_text "MyTextAnswer5"  #Answer.second.body
     end
 
     scenario 'not author question, can not shoose best answer' do
@@ -36,8 +37,7 @@ feature 'Author the question can shoose the best answer', %q{
 
       visit question_path(question)
 
-      save_and_open_page
-      expect(page).to_not have_field("answer_best")
+      expect(page).to have_no_link('Best Answer')
 
     end
   end

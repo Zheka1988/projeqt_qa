@@ -99,13 +99,4 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-  describe 'PATH #update choose best answer' do
-    it 'checked checbox' do
-      patch :update, params: { id: answer, answer: attributes_for(:answer) }, format: :js
-      answer.reload
-      expect(answer.best).to eq true
-    end
-
-  end
-
 end

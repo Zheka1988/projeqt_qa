@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
 
   before_action :set_question, only: [:create]
-  before_action :set_answer, only: [:edit, :destroy]
+  before_action :set_answer, only: [:edit, :destroy, :best_answer]
 
   def edit; end
 
@@ -23,11 +23,11 @@ class AnswersController < ApplicationController
   def destroy
     if current_user.author_of?(@answer)
       @answer.destroy
-    #   flash[:notice] = 'Your answer has been deleted.'
-    # else
-    #   flash[:notice] = 'Your answer has not been deleted.'
     end
-    # redirect_to question_path(@answer.question)
+  end
+
+  def best_answer
+    @answer.shoose_best_answer
   end
 
   private
