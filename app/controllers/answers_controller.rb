@@ -14,18 +14,20 @@ class AnswersController < ApplicationController
 
   def update
     @answer = Answer.find(params[:id])
-    @answer.update(answer_params)
-    @question = @answer.question
+    if current_user.author_of?(@answer)
+      @answer.update(answer_params)
+      @question = @answer.question
+    end
   end
 
   def destroy
     if current_user.author_of?(@answer)
       @answer.destroy
-      flash[:notice] = 'Your answer has been deleted.'
-    else
-      flash[:notice] = 'Your answer has not been deleted.'
+    #   flash[:notice] = 'Your answer has been deleted.'
+    # else
+    #   flash[:notice] = 'Your answer has not been deleted.'
     end
-    redirect_to question_path(@answer.question)
+    # redirect_to question_path(@answer.question)
   end
 
   private

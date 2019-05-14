@@ -129,16 +129,16 @@ RSpec.describe QuestionsController, type: :controller do
     let!(:question_false) { create :question, author: other_user }
 
     it 'deletes the question if logged user is author' do
-      expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+      expect { delete :destroy, params: { id: question }, format: :js }.to change(Question, :count).by(-1)
     end
 
     it 'deletes the question if user is not author' do
-      expect { delete :destroy, params: { id: question_false } }.to_not change(Question, :count)
+      expect { delete :destroy, params: { id: question_false }, format: :js }.to_not change(Question, :count)
     end
 
     it 'redirect to index' do
-      delete :destroy, params: { id: question }
-      expect(response).to redirect_to questions_path
+      delete :destroy, params: { id: question }, format: :js
+      expect(response).to render_template :destroy #redirect_to questions_path
     end
   end
 

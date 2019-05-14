@@ -10,5 +10,9 @@
       = f.text_area :body
       br
       = f.submit 'Save'
-    td= link_to "Delete", '#', class: 'delete-question-link', data: { question_id: question.id }
+    td= link_to "Delete",question_path(question),
+            method: :delete,
+            class: 'delete-question-link',
+            data: { question_id: question.id, confirm: 'You are sure'  },
+            remote: true
 </tr>

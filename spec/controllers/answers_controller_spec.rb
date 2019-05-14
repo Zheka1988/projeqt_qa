@@ -58,20 +58,20 @@ RSpec.describe AnswersController, type: :controller do
     let!(:answer_false) { create :answer, question: question, author: other_user  }
 
     it 'deletes the question if logged user is author ' do
-      expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+      expect { delete :destroy, params: { id: answer }, format: :js }.to change(Answer, :count).by(-1)
     end
 
     it 'deletes the question if user is not author ' do
-      expect { delete :destroy, params: { id: answer_false } }.to_not change(Answer, :count)
+      expect { delete :destroy, params: { id: answer_false }, format: :js }.to_not change(Answer, :count)
     end
 
     it 'redirect to index' do
-      delete :destroy, params: { id: answer }
-      expect(response).to redirect_to question_path(question)
+      delete :destroy, params: { id: answer }, format: :js
+      expect(response).to render_template :destroy #redirect_to question_path(question)
     end
   end
 
-  describe 'Path #update' do
+  describe 'PATH #update' do
     # let(:answer) { create :answer, question: question, author: user }
     context 'with valid attribute' do
       it 'changes answer attributes' do
@@ -97,6 +97,15 @@ RSpec.describe AnswersController, type: :controller do
         expect(response).to render_template :update
       end
     end
+  end
+
+  describe 'PATH #update choose best answer' do
+    it 'checked checbox' do
+      patch :update, params: { id: answer, answer: attributes_for(:answer) }, format: :js
+      answer.reload
+      expect(answer.best).to eq true
+    end
+
   end
 
 end

@@ -1,5 +1,9 @@
 - if answer.persisted?
-  tr
+  <tr id="record-answer-#{answer.id}">
+    td= form_with model: answer do |f|
+          = f.label :best, 'Best'
+          = f.check_box :best
+
     td= answer.body
     - if current_user&.author_of?(answer)
       td= link_to "Edit", '#', class: 'edit-answer-link', data: { answer_id: answer.id }
@@ -10,7 +14,8 @@
             br
             = f.submit 'Save'
       td= link_to "Delete", answer_path(answer),
-                            method: :delete,
-                            data: { confirm: 'You are sure' }
-
+            method: :delete,
+            data: { answer_id: answer.id, confirm: 'You are sure'  },
+            remote: true
+  </tr>
 
