@@ -7,7 +7,7 @@ feature 'Author the question can shoose the best answer', %q{
 
   given!(:user) { create(:user) }
   given!(:question) { create(:question, author: user) }
-  given!(:answer) { create(:answer, question: question, author: user) }
+  given!(:answer) { create_list(:answer, 3, question: question, author: user) }
 
   scenario 'Unauthenticated user can not shoose the best answer' do
     visit questions_path(question)
@@ -20,11 +20,17 @@ feature 'Author the question can shoose the best answer', %q{
       sign_in user
 
       visit question_path(question)
-      check "Best"
 
-      expect(page).to have_field('answer_best', checked: true)
+      answer_best_id = Answer.second.id
+      class_for_check = ".answer-" + answer_best_id.to_s + "-best"
 
-   end
+      within class_for_check do
+        check 'answer_best'
+      end
+
+      expect(page.find(class_for_check + " #answer_best")).to be_checked
+      expect(page).to have_field("answer_best", checked: true, count: 1)
+    end
   end
 
 end

@@ -6,7 +6,7 @@ FactoryBot.define do
   factory :answer do
     body
     question { nil }
-    best { true }
+    best { false }
     association :author, factory: :user
 
     trait :invalid do
