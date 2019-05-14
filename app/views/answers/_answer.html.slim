@@ -1,6 +1,7 @@
 - if answer.persisted?
   <tr id="record-answer-#{answer.id}">
-    td= form_with model: answer, html: { class: "answer-#{answer.id}-best"} do |f|
+    - if current_user&.author_of?(answer.question)
+      td= form_with model: answer, html: { class: "answer-#{answer.id}-best"} do |f|
           = f.label :best, 'Best'
           = f.check_box :best
 
