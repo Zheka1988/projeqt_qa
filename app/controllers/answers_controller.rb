@@ -17,17 +17,26 @@ class AnswersController < ApplicationController
     if current_user.author_of?(@answer)
       @answer.update(answer_params)
       @question = @answer.question
+    else
+      flash[:notice] = "Only author the answer can change the answer!"
+      redirect_to @answer.question
     end
   end
 
   def destroy
     if current_user.author_of?(@answer)
       @answer.destroy
+    else
+      flash[:notice] = "Only author the answer can delete the answer!"
     end
   end
 
   def best_answer
-    @answer.shoose_best_answer
+    if current_user.author_of?(@answer.question)
+      @answer.shoose_best_answer
+    else
+      flash[:notice] = "Shoose best answer for the question can only author the question!"
+    end
   end
 
   private

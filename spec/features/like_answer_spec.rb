@@ -23,13 +23,13 @@ feature 'Author the question can shoose the best answer', %q{
 
       id_for_check = 'tr#record-answer-' + Answer.second.id.to_s
 
+      expect(page).to have_link('Best Answer')
+
       within id_for_check do
         click_on 'Best Answer'
       end
 
-      expect(page).to have_link('Best Answer')
-      # expect(page).to have_css("tr:first", text: "#{text}")
-      expect("tr:first").to have_text "MyTextAnswer5"  #Answer.second.body
+      expect(page).to have_css('tbody:first-child', text: Answer.second.body )
     end
 
     scenario 'not author question, can not shoose best answer' do

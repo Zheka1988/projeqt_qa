@@ -5,11 +5,9 @@ class Answer < ApplicationRecord
   validates :body, presence: true
 
   def shoose_best_answer
-    if self.question.answers.find_by(best: true)
+    Answer.transaction do
       self.question.answers.where(best: true).update(best: false)
-      self.update(best: true)
-    else
-      self.update(best: true)
+      self.update!(best: true)
     end
   end
 

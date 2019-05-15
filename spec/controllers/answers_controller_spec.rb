@@ -40,18 +40,6 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-  # describe 'GET #edit' do
-  #   before { get :edit, params: { id: answer } }
-
-  #   it 'assign the requested answer to @answer' do
-  #     expect(assigns(:answer)).to eq answer
-  #   end
-
-  #   it 'render edit view' do
-  #     expect(response).to render_template :edit
-  #   end
-  # end
-
   describe 'DELETE #destroy' do
     let!(:answer) { create :answer, question: question, author: user }
     let!(:other_user) { create(:user) }
@@ -67,13 +55,12 @@ RSpec.describe AnswersController, type: :controller do
 
     it 'redirect to index' do
       delete :destroy, params: { id: answer }, format: :js
-      expect(response).to render_template :destroy #redirect_to question_path(question)
+      expect(response).to render_template :destroy
     end
   end
 
   describe 'PATH #update' do
-    # let(:answer) { create :answer, question: question, author: user }
-    context 'with valid attribute' do
+    context 'as author with valid attribute' do
       it 'changes answer attributes' do
         patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
         answer.reload
@@ -85,7 +72,7 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'with invalid attribute' do
+    context 'as author with invalid attribute' do
       it 'does not change answer attributes' do
         expect do
           patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
@@ -95,6 +82,50 @@ RSpec.describe AnswersController, type: :controller do
       it 'rendering update view' do
         patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
         expect(response).to render_template :update
+      end
+    end
+
+    context 'as not author' do
+      let!(:other_user) { create(:user) }
+      let!(:other_answer) { create :answer, question: question, author: other_user }
+
+      it 'attempt change answer' do
+        patch :update, params: { id: other_answer, answer: { body: "new body" } }, format: :js
+        expect(response).to redirect_to question
+      end
+    end
+  end
+
+  describe 'POST #best_answer' do
+
+
+    context 'author' do
+      let!(:answers) { create_list :answer, 3, question: question, author: user }
+
+      it 'author can shoose best answer' do
+        post :best_answer, params: { id: answer, answer: { best: true } }, format: :js
+        answer.reload
+        expect(answer.best).to eq true
+      end
+
+      it 'the question can have onle one best answer' do
+        post :best_answer, params: { id: Answer.second.id, answer: { best: true } }, format: :js
+        expect(Answer.where(best: true).count).to eq 1
+
+        post :best_answer, params: { id: Answer.first.id, answer: { best: true } }, format: :js
+        expect(Answer.where(best: true).count).to eq 1
+      end
+    end
+
+    context 'not author' do
+      let!(:other_user) { create(:user) }
+      let(:other_question) { create :question, author: other_user }
+      let(:answer) { create :answer, question: other_question, author: user }
+
+      it 'not can shoose best answer' do
+        post :best_answer, params: { id: answer, answer: { best: true } }, format: :js
+        answer.reload
+        expect(answer.best).to_not eq true
       end
     end
   end

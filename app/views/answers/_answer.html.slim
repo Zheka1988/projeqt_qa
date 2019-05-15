@@ -14,6 +14,9 @@
             data: { answer_id: answer.id, confirm: 'You are sure'  },
             remote: true
     - if current_user&.author_of?(answer.question)
-      td= link_to "Best Answer", best_answer_answer_path(answer), remote: true, class: "answer-#{answer.id}-best"
+      td= link_to "Best Answer", best_answer_answer_path(answer),
+          remote: true,
+          method: :post,
+          class: "answer-#{answer.id}-best"
   </tr>
 

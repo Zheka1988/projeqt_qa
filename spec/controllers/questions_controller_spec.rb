@@ -44,18 +44,6 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  # describe 'GET #edit' do
-  #   before { get :edit, params: { id: question } }
-
-  #   it 'assign the requested question to @question' do
-  #     expect(assigns(:question)).to eq question
-  #   end
-
-  #   it 'render edit view' do
-  #     expect(response).to render_template :edit
-  #   end
-  # end
-
   describe 'POST #create' do
     context 'with valid attributes' do
       it 'communication with logged in user is established' do
@@ -87,7 +75,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    context 'with valid attributes' do
+    context 'as author with valid attributes' do
       it 'assigns the requested question to @question' do
         patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
         expect(assigns(:question)).to eq question
@@ -103,11 +91,11 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'redirect to updates questions' do
         patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
-        expect(response).to render_template :update #redirect_to question
+        expect(response).to render_template :update
       end
     end
 
-    context 'with invalid attributes' do
+    context 'as author with invalid attributes' do
       before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js }
 
       it 'does not change question' do
@@ -118,7 +106,17 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       it 're-renders edit view' do
-        expect(response).to render_template :update #:edit
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'as not author' do
+      let!(:other_user) { create(:user) }
+      let!(:other_question) { create :question, author: other_user }
+
+      it 'attempt change question' do
+        patch :update, params: { id: other_question, question: { body: "new body" } }, format: :js
+        expect(response).to render_template :index
       end
     end
   end
@@ -138,7 +136,7 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'redirect to index' do
       delete :destroy, params: { id: question }, format: :js
-      expect(response).to render_template :destroy #redirect_to questions_path
+      expect(response).to render_template :destroy
     end
   end
 
