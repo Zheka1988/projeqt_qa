@@ -116,8 +116,15 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'attempt change question' do
         patch :update, params: { id: other_question, question: { body: "new body" } }, format: :js
-        expect(response).to render_template :index
+        expect(response.status).to eq 403
       end
+
+      it 'question attribute not change' do
+        expect do
+          patch :update, params: { id: other_question, question: { body: "new body" } }, format: :js
+        end.to_not change(other_question, :body)
+      end
+
     end
   end
 

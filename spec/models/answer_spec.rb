@@ -6,17 +6,20 @@ RSpec.describe Answer, type: :model do
   it { should validate_presence_of :body }
 
   context "shoose_best_answer" do
-    it "consist of first and last name" do
-      user = create(:user)
-      question = create :question, author: user
-      answer = create :answer, question:question, author: user
-      answer2 = create :answer, question:question, author: user
+    let!(:user) { create(:user) }
+    let!(:question) { create :question, author: user }
+    let!(:answer) { create :answer, question:question, author: user }
+    let!(:answer2) { create :answer, question:question, author: user }
 
+    it "change best answer" do
       answer.shoose_best_answer
-      assert_equal true, answer.best
+      expect(answer.best).to eq true
+    end
 
+    it "only one answer can be best" do
+      answer.shoose_best_answer
       answer2.shoose_best_answer
-      assert_equal 1, Answer.where(best: true).count
+      expect(Answer.where(best: true).count).to eq 1
     end
   end
 end

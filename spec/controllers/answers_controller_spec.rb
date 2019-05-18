@@ -89,6 +89,12 @@ RSpec.describe AnswersController, type: :controller do
       let!(:other_user) { create(:user) }
       let!(:other_answer) { create :answer, question: question, author: other_user }
 
+      it ' answer attribute not change' do
+        expect do
+          patch :update, params: { id: other_answer, answer: { body: "new body" } }, format: :js
+        end.to_not change(answer, :body)
+      end
+
       it 'attempt change answer' do
         patch :update, params: { id: other_answer, answer: { body: "new body" } }, format: :js
         expect(response).to redirect_to question
