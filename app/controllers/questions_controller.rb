@@ -29,8 +29,6 @@ class QuestionsController < ApplicationController
     if current_user.author_of?(@question)
       @question.update(question_params)
     else
-      # flash[:notice] = "Only author the question can change the question!"
-      # render :index
       head :forbidden
     end
   end
