@@ -13,13 +13,13 @@ RSpec.describe Answer, type: :model do
 
     it "change best answer" do
       answer.shoose_best_answer
-      expect(answer.best).to eq true
+      expect(answer).to be_best
     end
 
     it "only one answer can be best" do
       answer.shoose_best_answer
       answer2.shoose_best_answer
-      expect(Answer.where(best: true).count).to eq 1
+      expect(Answer.where(best: true, question_id: question.id).count).to eq 1
     end
   end
 end
