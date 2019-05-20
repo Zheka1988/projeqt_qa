@@ -44,18 +44,6 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'GET #edit' do
-    before { get :edit, params: { id: question } }
-
-    it 'assign the requested question to @question' do
-      expect(assigns(:question)).to eq question
-    end
-
-    it 'render edit view' do
-      expect(response).to render_template :edit
-    end
-  end
-
   describe 'POST #create' do
     context 'with valid attributes' do
       it 'communication with logged in user is established' do
@@ -87,14 +75,14 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    context 'with valid attributes' do
+    context 'as author with valid attributes' do
       it 'assigns the requested question to @question' do
-        patch :update, params: { id: question, question: attributes_for(:question) }
+        patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
         expect(assigns(:question)).to eq question
       end
 
       it 'changes question attributes' do
-        patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }
+        patch :update, params: { id: question, question: { title: 'new title', body: 'new body' }, format: :js }
         question.reload
 
         expect(question.title).to eq 'new title'
@@ -102,13 +90,13 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       it 'redirect to updates questions' do
-        patch :update, params: { id: question, question: attributes_for(:question) }
-        expect(response).to redirect_to question
+        patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
+        expect(response).to render_template :update
       end
     end
 
-    context 'with invalid attributes' do
-      before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) } }
+    context 'as author with invalid attributes' do
+      before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js }
 
       it 'does not change question' do
         question.reload
@@ -118,8 +106,25 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       it 're-renders edit view' do
-        expect(response).to render_template :edit
+        expect(response).to render_template :update
       end
+    end
+
+    context 'as not author' do
+      let!(:other_user) { create(:user) }
+      let!(:other_question) { create :question, author: other_user }
+
+      it 'attempt change question' do
+        patch :update, params: { id: other_question, question: { body: "new body" } }, format: :js
+        expect(response.status).to eq 403
+      end
+
+      it 'question attribute not change' do
+        expect do
+          patch :update, params: { id: other_question, question: { body: "new body" } }, format: :js
+        end.to_not change(other_question, :body)
+      end
+
     end
   end
 
@@ -129,16 +134,16 @@ RSpec.describe QuestionsController, type: :controller do
     let!(:question_false) { create :question, author: other_user }
 
     it 'deletes the question if logged user is author' do
-      expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+      expect { delete :destroy, params: { id: question }, format: :js }.to change(Question, :count).by(-1)
     end
 
     it 'deletes the question if user is not author' do
-      expect { delete :destroy, params: { id: question_false } }.to_not change(Question, :count)
+      expect { delete :destroy, params: { id: question_false }, format: :js }.to_not change(Question, :count)
     end
 
     it 'redirect to index' do
-      delete :destroy, params: { id: question }
-      expect(response).to redirect_to questions_path
+      delete :destroy, params: { id: question }, format: :js
+      expect(response).to render_template :destroy
     end
   end
 

@@ -26,21 +26,19 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update(question_params)
-      redirect_to @question
+    if current_user.author_of?(@question)
+      @question.update(question_params)
     else
-      render :edit
+      head :forbidden
     end
   end
 
   def destroy
     if current_user.author_of?(@question)
       @question.destroy
-      flash[:notice] = "Your question has been deleted."
     else
-      flash[:notice] = "Your question has not been deleted."
+      flash[:notice] = "Only author the question can delete the question!"
     end
-    redirect_to questions_path
   end
 
   private

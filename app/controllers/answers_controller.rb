@@ -2,32 +2,45 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
 
   before_action :set_question, only: [:create]
-  before_action :set_answer, only: [:edit, :destroy]
+  before_action :set_answer, only: [:edit, :destroy, :best_answer]
 
   def edit; end
 
   def create
     @answer = @question.answers.build(answer_params)
     @answer.author = current_user
-    if @answer.save
-      redirect_to @question, notice: 'Your answer has been published.'
+    @answer.save
+  end
+
+  def update
+    @answer = Answer.find(params[:id])
+    if current_user.author_of?(@answer)
+      @answer.update(answer_params)
+      @question = @answer.question
     else
-      flash[:notice] = 'Your answer has not been published.'
-      render "questions/show"
+      flash[:notice] = "Only author the answer can change the answer!"
+      redirect_to @answer.question
     end
   end
 
   def destroy
     if current_user.author_of?(@answer)
       @answer.destroy
-      flash[:notice] = 'Your answer has been deleted.'
     else
-      flash[:notice] = 'Your answer has not been deleted.'
+      flash[:notice] = "Only author the answer can delete the answer!"
     end
-    redirect_to question_path(@answer.question)
+  end
+
+  def best_answer
+    if current_user.author_of?(@answer.question)
+      @answer.shoose_best_answer
+    else
+      flash[:notice] = "Shoose best answer for the question can only author the question!"
+    end
   end
 
   private
+
   def set_question
     @question = Question.find(params[:question_id])
   end
@@ -37,7 +50,7 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, :best)
   end
 
 end

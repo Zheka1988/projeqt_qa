@@ -8,12 +8,12 @@ feature 'User can delete answer', %q{
   given(:question) { create :question, author: user }
   given!(:answer) { create :answer, question: question, author: user }
 
-  scenario 'delete answer if user logged' do
+  scenario 'delete answer if user logged', js: true do
     sign_in(user)
     visit question_path(question)
     click_on 'Delete'
 
-    expect(page).to have_content 'Your answer has been deleted.'
+    page.driver.browser.switch_to.alert.accept
     expect(page).to have_no_content 'MyTextAnswer'
   end
 
@@ -21,14 +21,14 @@ feature 'User can delete answer', %q{
     given(:other_user) { create(:user) }
     given!(:answer) { create :answer, question: question, author: other_user }
 
-    scenario 'if the user is not the author' do
+    scenario 'if the user is not the author', js: true do
       sign_in(user)
 
       visit question_path(question)
       expect(page).to have_no_link('Delete')
     end
 
-    scenario 'If the user is not logged in' do
+    scenario 'If the user is not logged in', js: true do
       visit question_path(question)
       expect(page).to have_no_link('Delete')
     end
