@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, only: [:show, :edit, :update, :destroy]
+  before_action :load_question, only: [:show, :edit, :update, :destroy, :delete_atach_file]
 
   def index
     @questions = Question.all
@@ -41,9 +41,19 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def delete_attach_file
+
+    # debugger
+    if @question.files.find(blob_id: params[:blob_id]).purge
+      render @question
+    else
+      flash[:notice] = "Что-то пошло не так!"
+    end
+  end
+
   private
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, files: [])
   end
 
   def load_question
