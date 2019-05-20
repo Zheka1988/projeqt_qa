@@ -4,6 +4,10 @@
     td= if answer.files.attached?
           - answer.files.each do |file|
             p= link_to file.filename.to_s, url_for(file)
+            - if current_user&.author_of?(@question)
+              p= link_to "Delete file", delete_attach_file_answer_path(file),
+                  method: :delete,
+                  data: { confirm: 'Are you sure?'  }
 
     - if current_user&.author_of?(answer)
       td= link_to "Edit", '#', class: 'edit-answer-link', data: { answer_id: answer.id }

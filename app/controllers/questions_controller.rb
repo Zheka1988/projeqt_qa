@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, only: [:show, :edit, :update, :destroy, :delete_atach_file]
+  before_action :load_question, only: [:show, :edit, :update, :destroy]
 
   def index
     @questions = Question.all
@@ -42,9 +42,9 @@ class QuestionsController < ApplicationController
   end
 
   def delete_attach_file
-
-    # debugger
-    if @question.files.find(blob_id: params[:blob_id]).purge
+    @file = ActiveStorage::Attachment.find(params[:id])
+    @question = Question.find(@file.record_id)
+    if @file.purge
       render @question
     else
       flash[:notice] = "Что-то пошло не так!"

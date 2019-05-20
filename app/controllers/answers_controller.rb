@@ -39,6 +39,17 @@ class AnswersController < ApplicationController
     end
   end
 
+
+  def delete_attach_file
+    @file = ActiveStorage::Attachment.find(params[:id])
+    @answer = Answer.find(@file.record_id)
+    if @file.purge
+      render @answer.question
+    else
+      flash[:notice] = "Что-то пошло не так!"
+    end
+  end
+
   private
 
   def set_question
