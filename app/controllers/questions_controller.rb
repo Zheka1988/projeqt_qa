@@ -41,16 +41,6 @@ class QuestionsController < ApplicationController
     end
   end
 
-  def delete_attach_file
-    @file = ActiveStorage::Attachment.find(params[:id])
-    @question = Question.find(@file.record_id)
-    if @file.purge
-      render @question
-    else
-      flash[:notice] = "Что-то пошло не так!"
-    end
-  end
-
   private
   def question_params
     params.require(:question).permit(:title, :body, files: [])

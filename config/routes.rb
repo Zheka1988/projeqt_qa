@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   resources :questions, shallow: true do
     resources :answers, only: [:create, :update, :destroy] do
       member { post :best_answer }
-      member { delete :delete_attach_file}
     end
-    member { delete :delete_attach_file}
   end
+
+  delete '/attach_files/:id', to: 'attach_files#destroy', as: 'attach_files'
 end
