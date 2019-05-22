@@ -2,10 +2,14 @@ class AttachFilesController < ApplicationController
 
   def destroy
     @file = ActiveStorage::Attachment.find(params[:id])
-    if @file.purge
-      redirect_to render_page(@file)
+    if current_user.author_of?(@file.record)
+      if @file.purge
+        redirect_to render_page(@file)
+      else
+        flash[:notice] = "Что-то пошло не так!"
+      end
     else
-      flash[:notice] = "Что-то пошло не так!"
+      head :forbidden
     end
   end
 
