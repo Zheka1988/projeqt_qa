@@ -12,6 +12,13 @@ p
         p= link_to "Delete file", attach_files_path(file),
             method: :delete,
             data: { confirm: 'Are you sure?'  }
+.links
+  -if !@question.links.blank?
+    p Links:
+    ul
+      - @question.links.each do |link|
+        li= link_to link.name, link.url
+
 .answers
   - if @question.answers
       table

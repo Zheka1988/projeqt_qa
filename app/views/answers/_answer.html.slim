@@ -1,6 +1,13 @@
 - if answer.persisted?
   <tr id="record-answer-#{answer.id}">
     td= answer.body
+
+    td= if !answer.links.blank?
+          p Links:
+          ul
+            - answer.links.each do |link|
+              li= link_to link.name, link.url
+
     td= if answer.files.attached?
           - answer.files.each do |file|
             p= link_to file.filename.to_s, url_for(file)
@@ -30,4 +37,5 @@
           method: :post,
           class: "answer-#{answer.id}-best"
   </tr>
+
 
