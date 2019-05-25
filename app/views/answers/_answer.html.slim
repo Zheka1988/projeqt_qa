@@ -1,6 +1,14 @@
 - if answer.persisted?
   <tr id="record-answer-#{answer.id}">
     td= answer.body
+    td= if answer.files.attached?
+          - answer.files.each do |file|
+            p= link_to file.filename.to_s, url_for(file)
+            - if current_user&.author_of?(@question)
+              p= link_to "Delete file", attach_files_path(file),
+                  method: :delete,
+                  data: { confirm: 'Are you sure?'  }
+
     - if current_user&.author_of?(answer)
       td= link_to "Edit", '#', class: 'edit-answer-link', data: { answer_id: answer.id }
       td= form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
@@ -8,6 +16,9 @@
             br
             = f.text_area :body
             br
+            = f.label :files
+            br
+            = f.file_field :files, multiple: true, direct_upload: true
             = f.submit 'Save'
       td= link_to "Delete", answer_path(answer),
             method: :delete,

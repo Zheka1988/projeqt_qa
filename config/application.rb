@@ -15,5 +15,6 @@ module ProjectQa
                        routing_specs: false,
                        request_specs: false
     end
+
   end
 end

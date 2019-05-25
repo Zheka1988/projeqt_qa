@@ -46,6 +46,21 @@ feature 'User can edit his answer', %q{
 
       expect(page).to have_content "Body can't be blank"
     end
+
+
+    scenario 'edit answer with add file/s', js: true do
+      sign_in user
+      visit question_path(question)
+      click_on 'Edit'
+
+      within '.answers' do
+        attach_file 'Files', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Save'
+      end
+
+      expect(page).to have_link 'rails_helper.rb'
+      expect(page).to have_link 'spec_helper.rb'
+    end
   end
 
   describe "user can't edit answer if not author" do
