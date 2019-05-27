@@ -17,8 +17,23 @@ p
     p Links:
     ul
       - @question.links.each do |link|
-        li= link_to link.name, link.url
-
+        - if link.url.include? "https://gist"
+          div id="link-#{link.id}"
+            li= javascript_include_tag link.url
+            - if current_user&.author_of?(@question)
+                p= link_to "Delete Link", links_destroy_path(link),
+                        method: :delete,
+                        data: { confirm: 'Are you sure?' },
+                        remote: true
+        - else
+          div id="link-#{link.id}"
+            li= link_to link.name, link.url
+            - if current_user&.author_of?(@question)
+              p= link_to "Delete Link", links_destroy_path(link),
+                        method: :delete,
+                        data: { confirm: 'Are you sure?' },
+                        remote: true
+hr
 .answers
   - if @question.answers
       table

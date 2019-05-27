@@ -6,7 +6,22 @@
           p Links:
           ul
             - answer.links.each do |link|
-              li= link_to link.name, link.url
+              - if link.url.include? "https://gist"
+                div id="link-#{link.id}"
+                  li= javascript_include_tag link.url
+                  - if current_user&.author_of?(answer)
+                    p= link_to "Delete Link", links_destroy_path(link),
+                          method: :delete,
+                          data: { confirm: 'Are you sure?' },
+                          remote: true
+              - else
+                div id="link-#{link.id}"
+                  li= link_to link.name, link.url
+                  - if current_user&.author_of?(answer)
+                    p= link_to "Delete Link", links_destroy_path(link),
+                          method: :delete,
+                          data: { confirm: 'Are you sure?' },
+                          remote: true
 
     td= if answer.files.attached?
           - answer.files.each do |file|
@@ -26,7 +41,14 @@
             = f.label :files
             br
             = f.file_field :files, multiple: true, direct_upload: true
+            p Links:
+            #links
+              = f.fields_for :links do |link|
+                = render 'link_fields', f: link
+              .links
+                = link_to_add_association 'add link', f, :links
             = f.submit 'Save'
+
       td= link_to "Delete", answer_path(answer),
             method: :delete,
             data: { answer_id: answer.id, confirm: 'You are sure'  },
