@@ -12,6 +12,17 @@ p
         p= link_to "Delete file", attach_files_path(file),
             method: :delete,
             data: { confirm: 'Are you sure?'  }
+hr
+.reward
+  -if !@question.rewards.blank?
+    p Rewards:
+    - @question.rewards.each do |r|
+      - if r.rewardable_id == @question.id
+        p= r.name
+        = image_tag(url_for(r.file) )
+
+hr
+
 .links
   -if !@question.links.blank?
     p Links:
@@ -33,7 +44,7 @@ p
                         method: :delete,
                         data: { confirm: 'Are you sure?' },
                         remote: true
-hr
+
 .answers
   - if @question.answers
       table

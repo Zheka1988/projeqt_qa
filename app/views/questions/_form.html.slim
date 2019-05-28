@@ -19,4 +19,16 @@
       = render 'link_fields', f: link
     .links
       = link_to_add_association 'add link', f, :links
+
+  p Reward:
+  #rewards
+    =f.fields_for :rewards do |r|
+      p
+        = r.label :name, 'name reward'
+        = r.text_field :name
+      p
+        = r.label :file
+        = r.file_field :file, direct_upload: true
+
+
   = f.submit 'Ask'

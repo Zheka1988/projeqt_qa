@@ -9,11 +9,13 @@ class QuestionsController < ApplicationController
   def show
     @answer = Answer.new
     @answer.links.new
+    # debugger
   end
 
   def new
     @question = Question.new
     @question.links.new #.build
+    @question.rewards.new
   end
 
   def edit; end
@@ -46,7 +48,8 @@ class QuestionsController < ApplicationController
   private
   def question_params
     params.require(:question).permit(:title, :body, files: [],
-                                        links_attributes: [:name, :url])
+                                        links_attributes: [:name, :url],
+                                        rewards_attributes: [:name, :file])
   end
 
   def load_question

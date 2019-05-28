@@ -4,6 +4,9 @@ class User < ApplicationRecord
   has_many :authored_answers, class_name: 'Answer', foreign_key: :author_id
   has_many :authored_questions, class_name: 'Question', foreign_key: :author_id
 
+  has_many :rewards, dependent: :destroy, as: :rewardable
+  # accepts_nested_attributes_for :rewards, reject_if: :all_blank
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 

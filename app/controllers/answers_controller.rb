@@ -34,12 +34,24 @@ class AnswersController < ApplicationController
   def best_answer
     if current_user.author_of?(@answer.question)
       @answer.shoose_best_answer
+      give_reward
     else
       flash[:notice] = "Shoose best answer for the question can only author the question!"
     end
+
   end
 
   private
+
+  def give_reward
+    @answer.question.rewards.each do |r|
+      if r.rewardable_id ==  @answer.question.id
+        @answer.author.rewards.new(name: r.name, file: r.file)
+      end
+    end
+    # debugger
+  end
+
   def set_question
     @question = Question.find(params[:question_id])
   end

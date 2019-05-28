@@ -4,6 +4,9 @@ RSpec.describe User, type: :model do
   describe "Associations" do
     it { should have_many(:authored_answers) }
     it { should have_many(:authored_questions) }
+
+    it { should have_many(:rewards).dependent(:destroy) }
+    # it { should accept_nested_attributes_for :rewards }
   end
 
   describe "Methods" do

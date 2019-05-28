@@ -47,6 +47,10 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question).links.first).to be_a_new(Link)
     end
 
+    it 'assign a new reward @question' do
+      expect(assigns(:question).rewards.first).to be_a_new(Reward)
+    end
+
     it 'render new view' do
       expect(response).to render_template :new
     end
