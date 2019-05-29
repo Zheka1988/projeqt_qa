@@ -34,6 +34,7 @@ class AnswersController < ApplicationController
   def best_answer
     if current_user.author_of?(@answer.question)
       @answer.shoose_best_answer
+      flash[:notice] = "Автору вопроса присвоена награда!"
       # give_reward
     else
       flash[:notice] = "Shoose best answer for the question can only author the question!"

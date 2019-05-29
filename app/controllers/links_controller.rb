@@ -11,8 +11,6 @@ class LinksController < ApplicationController
   end
 
   private
-
-
   def load_link
     @link = Link.find(params[:id])
     load_link_model
