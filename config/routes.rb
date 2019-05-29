@@ -8,8 +8,11 @@ Rails.application.routes.draw do
       member { post :best_answer }
     end
   end
-  get 'rewards', to: 'rewards#index', as: 'rewards'
-  delete '/links/:id', to: 'links#destroy', as: 'links_destroy'
-  delete '/attach_files/:id', to: 'attach_files#destroy', as: 'attach_files'
+  resources :rewards, only: [:index]
+  resources :links, only: [:destroy]
+  resources :attach_files, only: [:destroy]
+  # get 'rewards', to: 'rewards#index', as: 'rewards'
+  # delete '/links/:id', to: 'links#destroy', as: 'links_destroy'
+  # delete '/attach_files/:id', to: 'attach_files#destroy', as: 'attach_files'
 
 end

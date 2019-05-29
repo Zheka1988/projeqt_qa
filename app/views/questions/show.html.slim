@@ -9,17 +9,14 @@ p
     - @question.files.each do |file|
       p= link_to file.filename.to_s, url_for(file)
       - if current_user&.author_of?(@question)
-        p= link_to "Delete file", attach_files_path(file),
+        p= link_to "Delete file", attach_file_path(file),
             method: :delete,
             data: { confirm: 'Are you sure?'  }
 hr
 .reward
-  -if !@question.rewards.blank?
-    p Rewards:
-    - @question.rewards.each do |r|
-      - if r.rewardable_id == @question.id
-        p= r.name
-        = image_tag(url_for(r.file) )
+  - if @question.reward
+    p= "Reward: #{@question.reward.name}"
+    = image_tag(url_for(@question.reward.file) )
 
 hr
 
@@ -32,7 +29,7 @@ hr
           div id="link-#{link.id}"
             li= javascript_include_tag link.url
             - if current_user&.author_of?(@question)
-                p= link_to "Delete Link", links_destroy_path(link),
+                p= link_to "Delete Link", link_path(link),
                         method: :delete,
                         data: { confirm: 'Are you sure?' },
                         remote: true
@@ -40,7 +37,7 @@ hr
           div id="link-#{link.id}"
             li= link_to link.name, link.url
             - if current_user&.author_of?(@question)
-              p= link_to "Delete Link", links_destroy_path(link),
+              p= link_to "Delete Link", link_path(link),
                         method: :delete,
                         data: { confirm: 'Are you sure?' },
                         remote: true

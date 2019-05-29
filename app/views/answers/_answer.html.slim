@@ -10,7 +10,7 @@
                 div id="link-#{link.id}"
                   li= javascript_include_tag link.url
                   - if current_user&.author_of?(answer)
-                    p= link_to "Delete Link", links_destroy_path(link),
+                    p= link_to "Delete Link", link_path(link),
                           method: :delete,
                           data: { confirm: 'Are you sure?' },
                           remote: true
@@ -18,7 +18,7 @@
                 div id="link-#{link.id}"
                   li= link_to link.name, link.url
                   - if current_user&.author_of?(answer)
-                    p= link_to "Delete Link", links_destroy_path(link),
+                    p= link_to "Delete Link", link_path(link),
                           method: :delete,
                           data: { confirm: 'Are you sure?' },
                           remote: true
@@ -27,7 +27,7 @@
           - answer.files.each do |file|
             p= link_to file.filename.to_s, url_for(file)
             - if current_user&.author_of?(@question)
-              p= link_to "Delete file", attach_files_path(file),
+              p= link_to "Delete file", attach_file_path(file),
                   method: :delete,
                   data: { confirm: 'Are you sure?'  }
 

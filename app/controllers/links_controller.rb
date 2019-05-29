@@ -19,10 +19,6 @@ class LinksController < ApplicationController
   end
 
   def load_link_model
-    if @link.linkable_type == "Question"
-      @model = Question.find(@link.linkable_id)
-    elsif @link.linkable_type == "Answer"
-      @model = Answer.find(@link.linkable_id)
-    end
+    @model = @link.linkable
   end
 end

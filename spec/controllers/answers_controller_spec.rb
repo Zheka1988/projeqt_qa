@@ -107,6 +107,7 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'author' do
       let!(:answers) { create_list :answer, 3, question: question, author: user }
+      let!(:reward) { create :reward, question:question }
       it 'author can shoose best answer' do
         post :best_answer, params: { id: answer, answer: { best: true } }, format: :js
         answer.reload

@@ -8,7 +8,9 @@ feature 'Author the question can shoose the best answer', %q{
   given!(:user) { create(:user) }
   given!(:other_user) { create(:user) }
   given!(:question) { create(:question, author: user) }
+  # given!(:reward) {create :reward, question: question}#, file: "#{Rails.root}/app/assets/images/reward.png" }
   given!(:answer) { create_list(:answer, 3, question: question, author: user) }
+
 
   scenario 'Unauthenticated user can not shoose the best answer' do
     visit questions_path(question)
@@ -18,7 +20,21 @@ feature 'Author the question can shoose the best answer', %q{
 
   describe 'Authenticated user' do
     scenario 'author question, can choose best Answer', js: true do
-      sign_in user
+      sign_in(user)
+      visit questions_path
+      click_on 'Ask question'
+
+      fill_in 'Title', with: 'Text question'
+      fill_in 'Body', with: 'text text text'
+
+      fill_in 'name reward', with: 'My reward'
+      attach_file 'File', "#{Rails.root}/app/assets/images/reward.png"
+
+      click_on 'Ask'
+      visit question_path(question)
+
+      fill_in 'Body', with: 'answer answer answer'
+      click_on 'Reply'
       visit question_path(question)
 
       id_for_check = 'tr#record-answer-' + Answer.second.id.to_s

@@ -34,7 +34,7 @@ class AnswersController < ApplicationController
   def best_answer
     if current_user.author_of?(@answer.question)
       @answer.shoose_best_answer
-      give_reward
+      # give_reward
     else
       flash[:notice] = "Shoose best answer for the question can only author the question!"
     end
@@ -43,14 +43,16 @@ class AnswersController < ApplicationController
 
   private
 
-  def give_reward
-    @answer.question.rewards.each do |r|
-      if r.rewardable_id ==  @answer.question.id
-        @answer.author.rewards.create(name: r.name, file: r.file) #path: url_for(r.file)
-      end
-    end
-    # debugger
-  end
+  # def give_reward
+  #   # @answer.question.rewards.each do |r|
+  #   #   if r.rewardable_id ==  @answer.question.id
+  #   #     @answer.author.rewards.create(name: @answer.question.reward.name, file: @answer.question.reward.file) #path: url_for(r.file)
+  #   #   end
+  #   # end
+  #   @answer.author.create_reward(name: @answer.question.reward.name, file: @answer.question.reward.file)
+
+  #   # debugger
+  # end
 
   def set_question
     @question = Question.find(params[:question_id])
