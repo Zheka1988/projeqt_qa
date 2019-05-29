@@ -6,9 +6,9 @@ Rails.application.routes.draw do
     # member { delete 'links/:id', to: 'links#destroy', as: 'links_destroy' }
     resources :answers, only: [:create, :update, :destroy] do
       member { post :best_answer }
-
     end
   end
+  get 'rewards', to: 'rewards#index', as: 'rewards'
   delete '/links/:id', to: 'links#destroy', as: 'links_destroy'
   delete '/attach_files/:id', to: 'attach_files#destroy', as: 'attach_files'
 

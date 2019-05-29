@@ -1,0 +1,12 @@
+p= link_to "Main", questions_path
+h1 My Rewards
+-if !@rewards.blank?
+  - @rewards.each do |r|
+    p= r.name
+    /!
+      не получаеться вывести изображение
+      = image_tag (url_for(r.file))
+
+- else
+  p У вас нет наград
+

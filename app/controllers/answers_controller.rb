@@ -46,7 +46,7 @@ class AnswersController < ApplicationController
   def give_reward
     @answer.question.rewards.each do |r|
       if r.rewardable_id ==  @answer.question.id
-        @answer.author.rewards.new(name: r.name, file: r.file)
+        @answer.author.rewards.create(name: r.name, file: r.file) #path: url_for(r.file)
       end
     end
     # debugger
