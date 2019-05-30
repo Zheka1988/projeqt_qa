@@ -24,7 +24,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'redirect to show view' do
         post :create, params: { question_id: question, answer: attributes_for(:answer) }, format: :js
-        expect(response).to render_template :create #redirect_to assigns(:question)
+        expect(response).to render_template :create
       end
     end
 
@@ -35,7 +35,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'render to new view' do
         post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) }, format: :js
-        expect(subject).to render_template :create #("questions/show")
+        expect(subject).to render_template :create
       end
     end
   end

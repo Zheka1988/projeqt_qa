@@ -7,8 +7,6 @@ feature 'User can add reward for best to answer on question', %q{
 } do
 
   given(:user) { create(:user) }
-  # given(:question) { create :question, author: user }
-  # given(:reward) { "#{Rails.root}/app/assets/reward.png" }
 
   scenario 'user can add reward' do
     sign_in(user)
@@ -24,8 +22,6 @@ feature 'User can add reward for best to answer on question', %q{
     click_on 'Ask'
 
     expect(page).to have_content 'My reward'
-    # expect(page).to have_css("img[src='/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBDUT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--e9cbad16f411d90b9211a2993dca8bdf70a43c2b/reward.png']")
-    #проверка наличия картинки
   end
 
 end

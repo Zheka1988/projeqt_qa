@@ -6,7 +6,6 @@ RSpec.describe User, type: :model do
     it { should have_many(:authored_questions) }
 
     it { should have_one(:reward).dependent(:destroy) }
-    # it { should accept_nested_attributes_for :rewards }
   end
 
   describe "Methods" do

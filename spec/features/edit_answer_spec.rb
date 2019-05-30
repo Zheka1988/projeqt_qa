@@ -21,7 +21,6 @@ feature 'User can edit his answer', %q{
     scenario 'edits his answer', js: true do
       sign_in user
       visit question_path(question)
-      # save_and_open_page
       click_on 'Edit'
 
       within '.answers' do
@@ -62,11 +61,9 @@ feature 'User can edit his answer', %q{
       expect(page).to have_link 'spec_helper.rb'
     end
 
-
     scenario 'edit answer with add link', js: true do
       sign_in user
       visit question_path(question)
-
 
       within '.answers' do
         click_on 'Edit'

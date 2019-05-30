@@ -9,15 +9,13 @@ class QuestionsController < ApplicationController
   def show
     @answer = Answer.new
     @answer.links.new
-    # debugger
+
   end
 
   def new
     @question = Question.new
-    @question.links.new #.build
-    @question.build_reward #когда has_one
-    # @question.reward.new
-
+    @question.links.new
+    @question.build_reward
   end
 
   def edit; end
@@ -25,8 +23,6 @@ class QuestionsController < ApplicationController
   def create
     @question = current_user.authored_questions.build(question_params)
     if @question.save
-      # @reward = @question.create_reward(name: params[rewards_attributes: [:name]], file: params[rewards_attributes: [:file]])
-      # @reward.save
       redirect_to @question, notice: "Your question successfully created."
     else
       render :new

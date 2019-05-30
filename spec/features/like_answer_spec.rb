@@ -9,9 +9,7 @@ feature 'Author the question can shoose the best answer', %q{
   given!(:other_user) { create(:user) }
   given!(:question) { create(:question, author: user) }
   given!(:reward) { create :reward, question: question }
-  # given!(:reward) {create :reward, question: question}#, file: "#{Rails.root}/app/assets/images/reward.png" }
   given!(:answer) { create_list(:answer, 3, question: question, author: user) }
-
 
   scenario 'Unauthenticated user can not shoose the best answer' do
     visit questions_path(question)
@@ -34,8 +32,6 @@ feature 'Author the question can shoose the best answer', %q{
       end
 
       expect(page).to have_css('tbody:first-child', text: Answer.second.body )
-
-      # expect(page).to have_content("Автору вопроса присвоена награда!")
     end
 
     scenario 'not author question, can not shoose best answer' do
@@ -44,7 +40,6 @@ feature 'Author the question can shoose the best answer', %q{
       visit question_path(question)
 
       expect(page).to have_no_link('Best Answer')
-
     end
   end
 

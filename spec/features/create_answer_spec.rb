@@ -22,8 +22,7 @@ feature 'User can create answer', %q{
       fill_in 'Body', with: 'answer answer answer'
       click_on 'Reply'
 
-      # expect(page).to have_content 'Your answer has been published.'
-      within '.answers' do # чтобы убедиться, что ответ в списке, а не в форме
+      within '.answers' do
         expect(page).to have_content 'answer answer answer'
       end
     end
@@ -31,7 +30,6 @@ feature 'User can create answer', %q{
     scenario 'create answer with errors', js: true do
       click_on 'Reply'
 
-      # expect(page).to have_content 'Your answer has not been published.'
       expect(page).to have_content "Body can't be blank"
     end
 

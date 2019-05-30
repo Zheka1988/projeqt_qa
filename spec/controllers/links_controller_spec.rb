@@ -12,6 +12,12 @@ RSpec.describe LinksController, type: :controller do
     it "delete link" do
       expect { delete :destroy, params: { id: question.links.first.id }, format: :js }.to change(question.links, :count).by(-1)
     end
+
+    it 'redirect to index' do
+      delete :destroy, params: { id: question.links.first.id }, format: :js
+      expect(response).to render_template :destroy
+    end
+
   end
 
 end

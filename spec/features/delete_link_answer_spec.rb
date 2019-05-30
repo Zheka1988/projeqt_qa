@@ -10,7 +10,6 @@ feature 'User can delete any attach file for answer', %q{
   given!(:answer) { create :answer ,question: question, author: user }
   given(:google) { "https://google.ru" }
 
-# 'тот тест не проходит, потому что ссылки отображаеться 2 раза'
   scenario 'delete link if user author the answer', js: true do
     sign_in user
     visit question_path(question)

@@ -8,9 +8,9 @@ feature 'User can add links to answer', %q{
 
   given(:user) { create(:user) }
   given(:question) { create :question, author: user }
-  # given(:gist_url) { "https://gist.github.com/Zheka1988/1fface642803fb09e9d82ec4ccea17f5.js" }
   given(:google) { "https://google.ru" }
-  scenario 'user can add linsk to answer', js: true do
+
+  scenario 'user can add one link to answer', js: true do
     sign_in(user)
     visit question_path(question)
 
@@ -23,10 +23,28 @@ feature 'User can add links to answer', %q{
     within '.answers' do
       expect(page).to have_link 'My link', href: google
     end
+  end
 
-    # within '.answers' do
-    #   expect(page).to have_link 'My gist', href: gist_url
-    # end
+  scenario 'user can add several links to answer', js: true do
+    sign_in(user)
+    visit question_path(question)
+
+    fill_in 'Body', with: 'answer answer answer'
+
+    fill_in 'Link name', with: 'My link'
+    fill_in 'Url', with: google
+
+    click_on 'add link'
+
+    within '.nested-fields:nth-of-type(2)' do
+      fill_in 'Link name', with: 'My link'
+      fill_in 'Url', with: google
+    end
+    click_on 'Reply'
+
+    within '.answers' do
+      expect(page).to have_link 'My link', href: google, count: 4
+    end
   end
 
 end
