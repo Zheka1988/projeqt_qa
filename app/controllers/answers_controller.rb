@@ -34,12 +34,14 @@ class AnswersController < ApplicationController
   def best_answer
     if current_user.author_of?(@answer.question)
       @answer.shoose_best_answer
+      flash[:notice] = "Автору вопроса присвоена награда!"
     else
       flash[:notice] = "Shoose best answer for the question can only author the question!"
     end
   end
 
   private
+
   def set_question
     @question = Question.find(params[:question_id])
   end
@@ -49,7 +51,7 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body, :best, files: [])
+    params.require(:answer).permit(:body, :best, files: [], links_attributes: [:name, :url])
   end
 
 end

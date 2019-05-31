@@ -13,7 +13,6 @@ feature 'Any user can look answers', %q{
     expect(page).to have_content 'Show question'
     expect(page).to have_content 'MyString'
     expect(page).to have_content 'MyText'
-    # expect(page).to have_content 'Show answers'
     expect(page).to have_content 'MyTextAnswer', count: 3
   end
 end

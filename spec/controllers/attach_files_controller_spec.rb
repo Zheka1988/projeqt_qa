@@ -12,7 +12,6 @@ RSpec.describe AttachFilesController, type: :controller do
       file = fixture_file_upload("#{Rails.root}/spec/spec_helper.rb")
       question.files.attach(io: File.open("#{Rails.root}/spec/spec_helper.rb"),
         filename: 'spec_helper.rb', content_type: 'file/rb')
-        # expect(question.files).to be_attached
       expect { delete :destroy, params: { id: question.files.first.id } }.to change(question.files, :count).by(-1)
     end
   end

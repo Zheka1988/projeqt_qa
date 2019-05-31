@@ -1,11 +1,33 @@
 - if answer.persisted?
   <tr id="record-answer-#{answer.id}">
     td= answer.body
+
+    td= if !answer.links.blank?
+          p Links:
+          ul
+            - answer.links.each do |link|
+              - if link.url.include? "https://gist"
+                div id="link-#{link.id}"
+                  li= javascript_include_tag link.url
+                  - if current_user&.author_of?(answer)
+                    p= link_to "Delete Link", link_path(link),
+                          method: :delete,
+                          data: { confirm: 'Are you sure?' },
+                          remote: true
+              - else
+                div id="link-#{link.id}"
+                  li= link_to link.name, link.url
+                  - if current_user&.author_of?(answer)
+                    p= link_to "Delete Link", link_path(link),
+                          method: :delete,
+                          data: { confirm: 'Are you sure?' },
+                          remote: true
+
     td= if answer.files.attached?
           - answer.files.each do |file|
             p= link_to file.filename.to_s, url_for(file)
             - if current_user&.author_of?(@question)
-              p= link_to "Delete file", attach_files_path(file),
+              p= link_to "Delete file", attach_file_path(file),
                   method: :delete,
                   data: { confirm: 'Are you sure?'  }
 
@@ -19,7 +41,14 @@
             = f.label :files
             br
             = f.file_field :files, multiple: true, direct_upload: true
+            p Links:
+            #links
+              = f.fields_for :links do |link|
+                = render 'link_fields', f: link
+              .links
+                = link_to_add_association 'add link', f, :links
             = f.submit 'Save'
+
       td= link_to "Delete", answer_path(answer),
             method: :delete,
             data: { answer_id: answer.id, confirm: 'You are sure'  },
@@ -30,4 +59,5 @@
           method: :post,
           class: "answer-#{answer.id}-best"
   </tr>
+
 

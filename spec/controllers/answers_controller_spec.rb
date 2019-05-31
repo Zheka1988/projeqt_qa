@@ -24,7 +24,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'redirect to show view' do
         post :create, params: { question_id: question, answer: attributes_for(:answer) }, format: :js
-        expect(response).to render_template :create #redirect_to assigns(:question)
+        expect(response).to render_template :create
       end
     end
 
@@ -35,7 +35,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'render to new view' do
         post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) }, format: :js
-        expect(subject).to render_template :create #("questions/show")
+        expect(subject).to render_template :create
       end
     end
   end
@@ -107,14 +107,14 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'author' do
       let!(:answers) { create_list :answer, 3, question: question, author: user }
-
+      let!(:reward) { create :reward, question:question }
       it 'author can shoose best answer' do
         post :best_answer, params: { id: answer, answer: { best: true } }, format: :js
         answer.reload
         expect(answer.best).to eq true
       end
 
-      it 'the question can have onle one best answer' do
+      it 'the question can have only one best answer' do
         post :best_answer, params: { id: Answer.second.id, answer: { best: true } }, format: :js
         expect(Answer.where(best: true).count).to eq 1
 
