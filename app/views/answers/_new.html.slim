@@ -1,6 +1,6 @@
 .answer-errors
   = render 'shared/errors', resource: @answer
-
+/! , data: { type: :json }
 = form_with model: [@question, @answer], class: 'new-answer' do |f|
   = f.label :body
   br
@@ -18,3 +18,5 @@
     .links
       = link_to_add_association 'add link', f, :links
   = f.submit 'Reply'
+
+= link_to 'Back', questions_path, remote: true
