@@ -5,5 +5,4 @@ class Link < ApplicationRecord
 
   validates :name, :url, presence: true
   validates :url, format: URI::regexp(%w[http https])
-
 end
