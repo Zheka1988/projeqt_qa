@@ -27,4 +27,11 @@
             class: 'delete-question-link',
             data: { question_id: question.id, confirm: 'You are sure'  },
             remote: true
+  -if current_user && !current_user.author_of?(question)
+    td = link_to "Like", like_question_path(question),
+          method: :post,
+          remote: true
+    td = link_to "Dislike", dislike_question_path(question),
+          method: :post,
+          remote: true
 </tr>

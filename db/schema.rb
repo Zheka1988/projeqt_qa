@@ -90,13 +90,14 @@ ActiveRecord::Schema.define(version: 2019_06_03_060225) do
   end
 
   create_table "voitings", force: :cascade do |t|
-    t.integer "like"
-    t.integer "dislike"
-    t.string "voitingable_type"
-    t.bigint "voitingable_id"
+    t.integer "like", default: 0
+    t.integer "dislike", default: 0
+    t.bigint "users_id"
+    t.bigint "question_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["voitingable_type", "voitingable_id"], name: "index_voitings_on_voitingable_type_and_voitingable_id"
+    t.index ["question_id"], name: "index_voitings_on_question_id"
+    t.index ["users_id"], name: "index_voitings_on_users_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -105,4 +106,6 @@ ActiveRecord::Schema.define(version: 2019_06_03_060225) do
   add_foreign_key "questions", "users", column: "author_id"
   add_foreign_key "rewards", "questions"
   add_foreign_key "rewards", "users"
+  add_foreign_key "voitings", "questions"
+  add_foreign_key "voitings", "users", column: "users_id"
 end

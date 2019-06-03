@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, only: [:show, :edit, :update, :destroy]
+  before_action :load_question, only: [:show, :edit, :update, :destroy, :like, :dislike]
 
   def index
     @questions = Question.all
@@ -16,6 +16,7 @@ class QuestionsController < ApplicationController
     @question = Question.new
     @question.links.new
     @question.build_reward
+
   end
 
   def edit; end
@@ -23,6 +24,7 @@ class QuestionsController < ApplicationController
   def create
     @question = current_user.authored_questions.build(question_params)
     if @question.save
+    @question.create_voiting
       redirect_to @question, notice: "Your question successfully created."
     else
       render :new
@@ -42,6 +44,30 @@ class QuestionsController < ApplicationController
       @question.destroy
     else
       flash[:notice] = "Only author the question can delete the question!"
+    end
+  end
+
+  def like
+    if !current_user.author_of?(@question)
+      like = @question.voiting.like
+      @question.voiting.update(like: like + 1)
+      # respond_to do |format|
+      #   format.json { render json: questions_path }
+      # end
+    else
+      flash[:notice] = "Author can not voite the question!"
+    end
+  end
+
+  def dislike
+    if !current_user.author_of?(@question)
+      dislike = @question.voiting.like
+      @question.voiting.update(dislike: dislike + 1)
+      # respond_to do |format|
+      #   format.json { render json: questions_path }
+      # end
+    else
+      flash[:notice] = "Author can not voite the question!"
     end
   end
 

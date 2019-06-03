@@ -159,4 +159,22 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
+  describe 'POST #like' do
+    let!(:question) { create :question, author: user }
+    let!(:other_user) { create(:user) }
+
+    # before { post :like }
+
+    it 'like the question if user is autor' do
+      post :like, params: { id: question, question: attributes_for(:question) }
+      expect(assigns(:question).voiting.like).to eq 1
+    end
+    it 'like the question if user is not autor'
+    it 'like/dislike more more than once'
+  end
+
+  describe 'GET #dislike' do
+
+  end
+
 end

@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   root to: "questions#index"
   resources :questions, shallow: true do
     # member { delete 'links/:id', to: 'links#destroy', as: 'links_destroy' }
+    member { post :like }
+    member { post :dislike }
     resources :answers, only: [:create, :update, :destroy] do
       member { post :best_answer }
     end
