@@ -9,7 +9,28 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.build(answer_params)
     @answer.author = current_user
-    @answer.save
+    # @answer.save
+
+    # respond_to do |format|
+    #   # format.html { head :ok }
+    #   # format.js
+    #   if @answer.save
+    #     format.html { render @answer }
+    #   else
+    #     format.html { render partial: 'shared/errors', locals: { resource: @answer },
+    #                                        status: :unprocessable_entity }
+    #   end
+    # end
+    respond_to do |format|
+      if @answer.save
+        format.json { render json: @answer }
+      else
+        format.json do
+          render json: @answer.errors.full_messages, status: :unprocessable_entity
+        end
+      end
+    end
+
   end
 
   def update

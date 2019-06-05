@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, only: [:show, :edit, :update, :destroy]
+  before_action :load_question, only: [:show, :edit, :update, :destroy, :like, :dislike]
 
   def index
     @questions = Question.all
@@ -43,6 +43,33 @@ class QuestionsController < ApplicationController
     else
       flash[:notice] = "Only author the question can delete the question!"
     end
+  end
+
+  def like
+    if !current_user.author_of?(@question)
+      @voiting = current_user.voitings.create(question_id: @question.id, raiting: 1)
+    else
+      flash[:notice] = "Author the question can not voiting!"
+    end
+    # Со способом ниже я не разобрался поэтому сделал файл like,json,erb  и там расписал данные json
+    # respond_to do |format|
+    #   if @voiting.save
+    #     format.json { render json: @question  } - я делаю здесь что то неправильно, не знаю что
+    #   else
+    #     # format.json do
+    #     #   render json: @answer.errors.full_messages, status: :unprocessable_entity
+    #     # end
+    #   end
+    # end
+  end
+
+  def dislike
+    if !current_user.author_of?(@question)
+      @voiting = current_user.voitings.create(question_id: @question.id, raiting: -1)
+    else
+      flash[:notice] = "Author the question can not voiting!"
+    end
+
   end
 
   private

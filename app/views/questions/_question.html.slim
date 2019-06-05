@@ -1,6 +1,8 @@
 <tr id="delete-question-#{question.id}">
   td= question.title
   td= question.body
+  td class= "raiting"
+
   td= link_to "Show", question_path(question)
   - if current_user&.author_of?(question)
     td= link_to "Edit", '#', class: 'edit-question-link', data: { question_id: question.id }
@@ -26,5 +28,12 @@
             method: :delete,
             class: 'delete-question-link',
             data: { question_id: question.id, confirm: 'You are sure'  },
+            remote: true
+  - if current_user && !(current_user.author_of?(question))
+    td= link_to "Like", like_question_path(question),
+            method: :post,
+            remote: true
+    td= link_to "Disike", dislike_question_path(question),
+            method: :post,
             remote: true
 </tr>
