@@ -1,6 +1,7 @@
 - if answer.persisted?
-  <tr id="record-answer-#{answer.id}">
+  <tr class= "answer-#{answer.id}",  id="record-answer-#{answer.id}">
     td= answer.body
+    td class= "raiting-#{answer.id}"
 
     td= if !answer.links.blank?
           p Links:
@@ -58,6 +59,13 @@
           remote: true,
           method: :post,
           class: "answer-#{answer.id}-best"
+    - if current_user && !(current_user.author_of?(answer))
+      td= link_to "Like", like_answer_path(answer),
+              method: :post,
+              remote: true
+      td= link_to "Disike", dislike_answer_path(answer),
+              method: :post,
+              remote: true
   </tr>
 
 

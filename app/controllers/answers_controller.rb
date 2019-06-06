@@ -2,14 +2,14 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
 
   before_action :set_question, only: [:create]
-  before_action :set_answer, only: [:edit, :destroy, :best_answer]
+  before_action :set_answer, only: [:edit, :destroy, :best_answer, :like, :dislike]
 
   def edit; end
 
   def create
     @answer = @question.answers.build(answer_params)
     @answer.author = current_user
-    # @answer.save
+    @answer.save
 
     # respond_to do |format|
     #   # format.html { head :ok }
@@ -21,15 +21,15 @@ class AnswersController < ApplicationController
     #                                        status: :unprocessable_entity }
     #   end
     # end
-    respond_to do |format|
-      if @answer.save
-        format.json { render json: @answer }
-      else
-        format.json do
-          render json: @answer.errors.full_messages, status: :unprocessable_entity
-        end
-      end
-    end
+    # respond_to do |format|
+    #   if @answer.save
+    #     format.json { render json: @answer }
+    #   else
+    #     format.json do
+    #       render json: @answer.errors.full_messages, status: :unprocessable_entity
+    #     end
+    #   end
+    # end
 
   end
 
@@ -61,6 +61,22 @@ class AnswersController < ApplicationController
     end
   end
 
+  def like
+    if !current_user.author_of?(@answer)
+      @voiting = current_user.voitings.create(answer_id: @answer.id, raiting: 1)
+    else
+      flash[:notice] = "Author the answer can not voiting!"
+    end
+  end
+
+  def dislike
+    if !current_user.author_of?(@answer)
+       @voiting = current_user.voitings.create(answer_id: @answer.id, raiting: -1)
+    else
+      flash[:notice] = "Author the answer can not voiting!"
+    end
+
+  end
   private
 
   def set_question

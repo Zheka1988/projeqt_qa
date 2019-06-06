@@ -1,7 +1,7 @@
-<tr id="delete-question-#{question.id}">
+<tr class= "question-#{question.id}", id="delete-question-#{question.id}">
   td= question.title
   td= question.body
-  td class= "raiting"
+  td class= "raiting-#{question.id}"
 
   td= link_to "Show", question_path(question)
   - if current_user&.author_of?(question)

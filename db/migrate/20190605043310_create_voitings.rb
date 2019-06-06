@@ -5,6 +5,7 @@ class CreateVoitings < ActiveRecord::Migration[5.2]
 
       t.belongs_to :user, foreign_key: true
       t.belongs_to :question, foreign_key: true
+      t.belongs_to :answer, foreign_key: true
 
       t.timestamps
     end

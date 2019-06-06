@@ -51,14 +51,15 @@ class QuestionsController < ApplicationController
     else
       flash[:notice] = "Author the question can not voiting!"
     end
+    # @voiting.save
     # Со способом ниже я не разобрался поэтому сделал файл like,json,erb  и там расписал данные json
     # respond_to do |format|
     #   if @voiting.save
     #     format.json { render json: @question  } - я делаю здесь что то неправильно, не знаю что
-    #   else
-    #     # format.json do
-    #     #   render json: @answer.errors.full_messages, status: :unprocessable_entity
-    #     # end
+    #   # else
+    #   #   # format.json do
+    #   #   #   render json: @answer.errors.full_messages, status: :unprocessable_entity
+    #   #   # end
     #   end
     # end
   end
@@ -69,7 +70,6 @@ class QuestionsController < ApplicationController
     else
       flash[:notice] = "Author the question can not voiting!"
     end
-
   end
 
   private

@@ -8,6 +8,8 @@ Rails.application.routes.draw do
     member { post :dislike }
     resources :answers, only: [:create, :update, :destroy] do
       member { post :best_answer }
+      member { post :like }
+      member { post :dislike }
     end
   end
   resources :rewards, only: [:index]

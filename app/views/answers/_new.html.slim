@@ -1,7 +1,8 @@
 .answer-errors
   = render 'shared/errors', resource: @answer
 /! , data: { type: :html }
-= form_with model: [@question, @answer], class: 'new-answer', data: { type: :json } do |f|
+/! , data: { type: :json }
+= form_with model: [@question, @answer], class: 'new-answer' do |f|
   = f.label :body
   br
   = f.text_area :body
