@@ -1,9 +1,11 @@
 class Question < ApplicationRecord
+  include Voitingable
+
   belongs_to :author, class_name: "User", foreign_key: :author_id
   has_many :answers, dependent: :destroy
   has_many :links, dependent: :destroy, as: :linkable
   has_one :reward, dependent: :destroy
-  has_many :voitings,  dependent: :destroy
+  # has_many :voitings, as: :voitingable,  dependent: :destroy
 
   has_many_attached :files
 
@@ -13,7 +15,7 @@ class Question < ApplicationRecord
   validates :title, presence: true
   validates :body, presence: true
 
-  def sum_raiting
-    self.voitings.sum(:raiting)
-  end
+  # def sum_raiting
+  #   self.voitings.sum(:raiting)
+  # end
 end

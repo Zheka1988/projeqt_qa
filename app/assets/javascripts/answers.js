@@ -32,9 +32,8 @@ $(document).on('turbolinks:load', function(){
   //     })
   //   })
   $('.answers').on('ajax:success', function(e){
-    // console.log(this);
     var voiting = e.detail[0];
-    $('.answers .table-answers .answer-' + voiting.answer_id + ' .raiting-' + voiting.answer_id).html(voiting.raiting);
+    $('.answers .table-answers .answer-' + voiting.voitingable_id + ' .raiting-' + voiting.voitingable_id).html(voiting.sum_raiting);
   })
 
 });

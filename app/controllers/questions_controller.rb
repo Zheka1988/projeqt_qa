@@ -47,29 +47,20 @@ class QuestionsController < ApplicationController
 
   def like
     if !current_user.author_of?(@question)
-      @voiting = current_user.voitings.create(question_id: @question.id, raiting: 1)
+      @voiting = current_user.voitings.create(voitingable_type: 'Question', voitingable_id: @question.id, raiting: 1)
     else
       flash[:notice] = "Author the question can not voiting!"
     end
-    # @voiting.save
-    # Со способом ниже я не разобрался поэтому сделал файл like,json,erb  и там расписал данные json
-    # respond_to do |format|
-    #   if @voiting.save
-    #     format.json { render json: @question  } - я делаю здесь что то неправильно, не знаю что
-    #   # else
-    #   #   # format.json do
-    #   #   #   render json: @answer.errors.full_messages, status: :unprocessable_entity
-    #   #   # end
-    #   end
-    # end
+    render json: @voiting.as_json.merge(sum_raiting: @question.sum_raiting)
   end
 
   def dislike
     if !current_user.author_of?(@question)
-      @voiting = current_user.voitings.create(question_id: @question.id, raiting: -1)
+      @voiting = current_user.voitings.create(voitingable_type: 'Question', voitingable_id: @question.id, raiting: -1)
     else
       flash[:notice] = "Author the question can not voiting!"
     end
+    render json: @voiting.as_json.merge(sum_raiting: @question.sum_raiting)
   end
 
   private

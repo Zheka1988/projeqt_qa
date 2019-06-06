@@ -7,19 +7,12 @@ $(document).on('turbolinks:load', function(){
   })
 
   $('.questions').on('ajax:success', function(e){
-    // console.log(this);
     var voiting = e.detail[0];
-    $('.questions .table-questions .question-' + voiting.question_id + ' .raiting-' + voiting.question_id).html(voiting.raiting);
-  })//.
-    // on('ajax:error', function(e){
-    //   var errors = e.detail[0];
+    $('.questions .table-questions .question-' + voiting.voitingable_id + ' .raiting-' + voiting.voitingable_id).html(voiting.sum_raiting);
+  })
 
-    //   $.each(errors, function(index, value){
-    //     $('.question-errors').append('<p>'+ value + '</p>')
-    //   })
-    // })
 
 });
- // #delete-question-' + voiting.question_id + ' #raiting
+
 
 

@@ -10,27 +10,6 @@ class AnswersController < ApplicationController
     @answer = @question.answers.build(answer_params)
     @answer.author = current_user
     @answer.save
-
-    # respond_to do |format|
-    #   # format.html { head :ok }
-    #   # format.js
-    #   if @answer.save
-    #     format.html { render @answer }
-    #   else
-    #     format.html { render partial: 'shared/errors', locals: { resource: @answer },
-    #                                        status: :unprocessable_entity }
-    #   end
-    # end
-    # respond_to do |format|
-    #   if @answer.save
-    #     format.json { render json: @answer }
-    #   else
-    #     format.json do
-    #       render json: @answer.errors.full_messages, status: :unprocessable_entity
-    #     end
-    #   end
-    # end
-
   end
 
   def update
@@ -63,19 +42,20 @@ class AnswersController < ApplicationController
 
   def like
     if !current_user.author_of?(@answer)
-      @voiting = current_user.voitings.create(answer_id: @answer.id, raiting: 1)
+      @voiting = current_user.voitings.create(voitingable_type: 'Answer', voitingable_id: @answer.id, raiting: 1)
     else
       flash[:notice] = "Author the answer can not voiting!"
     end
+    render json: @voiting.as_json.merge(sum_raiting: @answer.sum_raiting)
   end
 
   def dislike
     if !current_user.author_of?(@answer)
-       @voiting = current_user.voitings.create(answer_id: @answer.id, raiting: -1)
+      @voiting = current_user.voitings.create(voitingable_type: 'Answer', voitingable_id: @answer.id, raiting: -1)
     else
       flash[:notice] = "Author the answer can not voiting!"
     end
-
+    render json: @voiting.as_json.merge(sum_raiting: @answer.sum_raiting)
   end
   private
 

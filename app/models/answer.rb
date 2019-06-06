@@ -1,8 +1,10 @@
 class Answer < ApplicationRecord
+  include Voitingable
+
   belongs_to :question
   belongs_to :author, class_name: "User", foreign_key: :author_id
   has_many :links, dependent: :destroy, as: :linkable
-  has_many :voitings,  dependent: :destroy
+  # has_many :voitings, as: :voitingable,  dependent: :destroy
 
   has_many_attached :files
 
@@ -18,8 +20,8 @@ class Answer < ApplicationRecord
     end
   end
 
-  def sum_raiting
-    self.voitings.sum(:raiting)
-  end
+  # def sum_raiting
+  #   self.voitings.sum(:raiting)
+  # end
 
 end
