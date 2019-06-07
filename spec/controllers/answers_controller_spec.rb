@@ -103,8 +103,6 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #best_answer' do
-
-
     context 'author' do
       let!(:answers) { create_list :answer, 3, question: question, author: user }
       let!(:reward) { create :reward, question:question }

@@ -4,7 +4,6 @@ class Answer < ApplicationRecord
   belongs_to :question
   belongs_to :author, class_name: "User", foreign_key: :author_id
   has_many :links, dependent: :destroy, as: :linkable
-  # has_many :voitings, as: :voitingable,  dependent: :destroy
 
   has_many_attached :files
 
@@ -19,9 +18,5 @@ class Answer < ApplicationRecord
       self.question.reward.update(user_id: self.author.id )
     end
   end
-
-  # def sum_raiting
-  #   self.voitings.sum(:raiting)
-  # end
 
 end

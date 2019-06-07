@@ -42,7 +42,7 @@ class AnswersController < ApplicationController
 
   def like
     if !current_user.author_of?(@answer)
-      @voiting = current_user.voitings.create(voitingable_type: 'Answer', voitingable_id: @answer.id, raiting: 1)
+      @voiting = current_user.voitings.create(voitingable: @answer, raiting: 1)
     else
       flash[:notice] = "Author the answer can not voiting!"
     end
@@ -51,7 +51,7 @@ class AnswersController < ApplicationController
 
   def dislike
     if !current_user.author_of?(@answer)
-      @voiting = current_user.voitings.create(voitingable_type: 'Answer', voitingable_id: @answer.id, raiting: -1)
+      @voiting = current_user.voitings.create(voitingable: @answer, raiting: -1)
     else
       flash[:notice] = "Author the answer can not voiting!"
     end

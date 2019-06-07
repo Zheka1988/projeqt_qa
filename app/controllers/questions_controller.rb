@@ -47,20 +47,23 @@ class QuestionsController < ApplicationController
 
   def like
     if !current_user.author_of?(@question)
-      @voiting = current_user.voitings.create(voitingable_type: 'Question', voitingable_id: @question.id, raiting: 1)
+      @voiting = current_user.voitings.create(voitingable: @question, raiting: 1)
+      render json: @voiting.as_json.merge(sum_raiting: @question.sum_raiting)
     else
       flash[:notice] = "Author the question can not voiting!"
+      render :index
     end
-    render json: @voiting.as_json.merge(sum_raiting: @question.sum_raiting)
   end
 
   def dislike
     if !current_user.author_of?(@question)
-      @voiting = current_user.voitings.create(voitingable_type: 'Question', voitingable_id: @question.id, raiting: -1)
+      @voiting = current_user.voitings.create(voitingable: @question, raiting: -1)
+      render json: @voiting.as_json.merge(sum_raiting: @question.sum_raiting)
     else
       flash[:notice] = "Author the question can not voiting!"
+      render :index
     end
-    render json: @voiting.as_json.merge(sum_raiting: @question.sum_raiting)
+
   end
 
   private
