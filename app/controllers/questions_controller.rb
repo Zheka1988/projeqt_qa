@@ -1,6 +1,8 @@
 class QuestionsController < ApplicationController
+  include Voitinged
+
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, only: [:show, :edit, :update, :destroy, :like, :dislike]
+  before_action :load_question, only: [:show, :edit, :update, :destroy ]
 
   def index
     @questions = Question.all
@@ -43,27 +45,6 @@ class QuestionsController < ApplicationController
     else
       flash[:notice] = "Only author the question can delete the question!"
     end
-  end
-
-  def like
-    if !current_user.author_of?(@question)
-      @voiting = current_user.voitings.create(voitingable: @question, raiting: 1)
-      render json: @voiting.as_json.merge(sum_raiting: @question.sum_raiting)
-    else
-      flash[:notice] = "Author the question can not voiting!"
-      render :index
-    end
-  end
-
-  def dislike
-    if !current_user.author_of?(@question)
-      @voiting = current_user.voitings.create(voitingable: @question, raiting: -1)
-      render json: @voiting.as_json.merge(sum_raiting: @question.sum_raiting)
-    else
-      flash[:notice] = "Author the question can not voiting!"
-      render :index
-    end
-
   end
 
   private

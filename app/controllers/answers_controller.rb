@@ -1,8 +1,10 @@
 class AnswersController < ApplicationController
+  include Voitinged
+
   before_action :authenticate_user!
 
   before_action :set_question, only: [:create]
-  before_action :set_answer, only: [:edit, :destroy, :best_answer, :like, :dislike]
+  before_action :set_answer, only: [:edit, :destroy, :best_answer]
 
   def edit; end
 
@@ -40,23 +42,6 @@ class AnswersController < ApplicationController
     end
   end
 
-  def like
-    if !current_user.author_of?(@answer)
-      @voiting = current_user.voitings.create(voitingable: @answer, raiting: 1)
-    else
-      flash[:notice] = "Author the answer can not voiting!"
-    end
-    render json: @voiting.as_json.merge(sum_raiting: @answer.sum_raiting)
-  end
-
-  def dislike
-    if !current_user.author_of?(@answer)
-      @voiting = current_user.voitings.create(voitingable: @answer, raiting: -1)
-    else
-      flash[:notice] = "Author the answer can not voiting!"
-    end
-    render json: @voiting.as_json.merge(sum_raiting: @answer.sum_raiting)
-  end
   private
 
   def set_question
