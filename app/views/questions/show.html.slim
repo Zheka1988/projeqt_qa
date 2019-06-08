@@ -44,7 +44,7 @@ hr
 
 .answers
   - if @question.answers
-      table
+      table class="table-answers"
         == render @question.answers
 
 == render 'answers/new', resource: @question

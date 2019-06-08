@@ -1,18 +1,20 @@
 Rails.application.routes.draw do
 
+  concern :voitingable do
+    member do
+      post :like
+      post :dislike
+    end
+  end
+
   devise_for :users
   root to: "questions#index"
-  resources :questions, shallow: true do
-    # member { delete 'links/:id', to: 'links#destroy', as: 'links_destroy' }
-    resources :answers, only: [:create, :update, :destroy] do
+  resources :questions, concerns: [:voitingable], shallow: true do
+    resources :answers, only: [:create, :update, :destroy], concerns: [:voitingable] do
       member { post :best_answer }
     end
   end
   resources :rewards, only: [:index]
   resources :links, only: [:destroy]
   resources :attach_files, only: [:destroy]
-  # get 'rewards', to: 'rewards#index', as: 'rewards'
-  # delete '/links/:id', to: 'links#destroy', as: 'links_destroy'
-  # delete '/attach_files/:id', to: 'attach_files#destroy', as: 'attach_files'
-
 end
