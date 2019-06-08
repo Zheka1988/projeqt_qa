@@ -31,9 +31,13 @@ RSpec.describe Answer, type: :model do
   context "find out rating" do
     let!(:user) { create(:user) }
     let!(:other_user_one) { create(:user) }
+    let!(:other_user_two) { create(:user) }
+    let!(:other_user_three) { create(:user) }
     let!(:question) { create :question, author: user }
     let!(:answer) { create :answer, question:question, author: user }
-    let!(:voiting) { create :voiting, voitingable_type: "Answer", voitingable_id: answer.id, user_id: other_user_one.id }
+    let!(:voiting) { create :voiting, voitingable: answer, user_id: other_user_one.id }
+    let!(:voiting_1) { create :voiting, voitingable: answer, user_id: other_user_two.id }
+    let!(:voiting_2) { create :voiting, voitingable: answer, user_id: other_user_three.id, raiting: -1 }
 
     it 'sum_raiting' do
       expect(answer.sum_raiting).to eq 1
