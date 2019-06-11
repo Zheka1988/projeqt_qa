@@ -14,7 +14,10 @@
 //= require activestorage
 //= require turbolinks
 //= require jquery3
+//= require action_cable
 //= require cocoon
 //= require_tree .
 //=require_self
 
+var App = App || {};
+App.cable = ActionCable.createConsumer();
