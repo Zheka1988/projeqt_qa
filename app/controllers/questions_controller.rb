@@ -65,9 +65,9 @@ class QuestionsController < ApplicationController
     ActionCable.server.broadcast(
       'questions',
       ApplicationController.render(
-        # partial: 'questions/question',
-        # locals: { question: @question , current_user: nil}
-        json: { title: @question.title, body: @question.body }
+        partial: 'questions/question',
+        locals: { question: @question , current_user: nil}
+        # json: { title: @question.title, body: @question.body }
         )
         #схема другая: отправляем не паршл,
         # а данные в json, а на клиенте из них строим уже нужный html

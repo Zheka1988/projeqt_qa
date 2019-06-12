@@ -6,6 +6,7 @@ feature 'User can create question', %q{
 } do
 
   given(:user) { create(:user) }
+  given(:guest) { create(:user) }
 
   describe 'Authenticated user' do
     background do
@@ -60,6 +61,7 @@ feature 'User can create question', %q{
       end
 
       Capybara.using_session('guest') do
+        sign_in(guest)
         visit questions_path
       end
 
@@ -69,18 +71,14 @@ feature 'User can create question', %q{
         fill_in 'Title', with: 'Text question'
         fill_in 'Body', with: 'text text text'
         click_on 'Ask'
-
+        save_and_open_page
         expect(page).to have_content 'Text question'
         expect(page).to have_content 'text text text'
       end
 
       Capybara.using_session('guest') do
-        # visit questions_path
-        # save_and_open_page
-        within '.questions .table-questions' do
-          expect(page).to have_content 'Text question'
-        end
-        # expect(page).to have_content 'text text text'
+        expect(page).to have_content 'Text question'
+        expect(page).to have_content 'text text text'
       end
     end
   end
