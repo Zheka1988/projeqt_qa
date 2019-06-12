@@ -39,13 +39,11 @@ $(document).on('turbolinks:load', function(){
   App.cable.subscriptions.create('AnswersChannel', {
     connected: function() {
 
-      console.log("Connected!  -id: " + gon.question_id);
-
-      // this.perform('follow' )
+      this.perform('start_st_answers', {question_id: gon.question_id} )
     },
 
     received: function(data) {
-      // console.log(data)
+      console.log("Connected!  -id: " + data);
 
       // $('.questions .table-questions').append(data);
     }
