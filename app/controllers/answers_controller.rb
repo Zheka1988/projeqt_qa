@@ -6,7 +6,7 @@ class AnswersController < ApplicationController
   before_action :set_question, only: [:create]
   before_action :set_answer, only: [:edit, :destroy, :best_answer]
 
-  before_action :gon_question, only: [:create]
+
   after_action :publish_answer, only: [:create]
 
 
@@ -76,9 +76,4 @@ class AnswersController < ApplicationController
       question_user_id:   @answer.question.author.id
     )
   end
-
-  def gon_question
-    gon.question_id = @question.id
-  end
-
 end

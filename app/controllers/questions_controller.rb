@@ -3,6 +3,7 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :edit, :update, :destroy ]
+  before_action :gon_question, only: [:show]
 
   after_action :publish_question, only: [:create]
 
@@ -77,8 +78,9 @@ class QuestionsController < ApplicationController
 
     )
   end
+  def gon_question
+    gon.question_id = @question.id
+  end
 
 end
-
-
 

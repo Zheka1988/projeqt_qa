@@ -6,7 +6,7 @@ feature 'User can create question', %q{
 } do
 
   given(:user) { create(:user) }
-  given(:guest) { create(:user) }
+  # given(:guest) { create(:user) }
 
   describe 'Authenticated user' do
     background do
@@ -54,14 +54,14 @@ feature 'User can create question', %q{
   end
 
   describe "multiple sessions" do
-    scenario "question appears on another user's page" do
+    scenario "question appears on another user's page", js: true do
       Capybara.using_session('user') do
         sign_in(user)
         visit questions_path
       end
 
       Capybara.using_session('guest') do
-        sign_in(guest)
+        # sign_in(guest)
         visit questions_path
       end
 
@@ -71,7 +71,6 @@ feature 'User can create question', %q{
         fill_in 'Title', with: 'Text question'
         fill_in 'Body', with: 'text text text'
         click_on 'Ask'
-        save_and_open_page
         expect(page).to have_content 'Text question'
         expect(page).to have_content 'text text text'
       end

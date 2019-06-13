@@ -43,9 +43,9 @@ $(document).on('turbolinks:load', function(){
     },
 
     received: function(data) {
-      console.log("Connected!  -id: " + data);
+      console.log(data);
 
-      // $('.questions .table-questions').append(data);
+      // $('.answers .table-answers').append(data.answer.body);
     }
   })
 });
