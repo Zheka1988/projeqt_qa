@@ -36,4 +36,16 @@ $(document).on('turbolinks:load', function(){
     $('.answers .table-answers .answer-' + voiting.voitingable_id + ' .raiting-' + voiting.voitingable_id).html(voiting.sum_raiting);
   })
 
+  App.cable.subscriptions.create('AnswersChannel', {
+    connected: function() {
+
+      this.perform('start_st_answers', {question_id: gon.question_id} )
+    },
+
+    received: function(data) {
+      console.log(data);
+
+      // $('.answers .table-answers').append(data.answer.body);
+    }
+  })
 });

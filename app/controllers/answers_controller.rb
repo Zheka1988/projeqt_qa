@@ -6,6 +6,10 @@ class AnswersController < ApplicationController
   before_action :set_question, only: [:create]
   before_action :set_answer, only: [:edit, :destroy, :best_answer]
 
+
+  after_action :publish_answer, only: [:create]
+
+
   def edit; end
 
   def create
@@ -56,4 +60,20 @@ class AnswersController < ApplicationController
     params.require(:answer).permit(:body, :best, files: [], links_attributes: [:name, :url])
   end
 
+  def publish_answer
+    return if @answer.errors.any?
+    # attach = {}
+    # @answer.attachments.each do |a|
+    #   attach[:id] = a.id
+    #   attach[:file_url] = a.file.url
+    #   attach[:file_name] = a.file.identifier
+    # end
+    ActionCable.server.broadcast(
+      "answers_#{@question.id}",
+      answer:             @answer,
+      # answer_attachments: attach,
+      answer_voitings:      @answer.voitings,
+      question_user_id:   @answer.question.author.id
+    )
+  end
 end

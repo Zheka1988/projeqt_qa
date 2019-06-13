@@ -1,9 +1,9 @@
-p= link_to "Main", questions_path
-h1= "Show question"
+p= link_to "Главная", questions_path
+h1= "Вопрос"
 
-h3= "Title: #{@question.title}"
+h3= "Заголовок: #{@question.title}"
 p
-  b= "Body_Question: #{@question.body}"
+  b= "Тело вопроса: #{@question.body}"
 
   - if @question.files.attached?
     - @question.files.each do |file|
@@ -17,7 +17,8 @@ hr
   - if @question.reward
     p= "Reward: #{@question.reward.name}"
     = image_tag(url_for(@question.reward.file) )
-
+  - else
+    h4= "У вопроса нет наград"
 hr
 
 .links
@@ -41,12 +42,33 @@ hr
                         method: :delete,
                         data: { confirm: 'Are you sure?' },
                         remote: true
+  - else
+    h4= "У вопроса нет ссылок"
 
+hr
+h4= "Комментарии"
+.comments
+  - if !@question.comments.blank?
+    - @question.comments.each do |comment|
+      p= comment.body
+  - if current_user
+/!    == render 'comments/new', commentable: @commentable
+    = form_with model: @question do |f|
+      = f.fields_for :comments do |c|
+        = c.text_field :body
+        br
+      = f.submit 'Create comment'
+
+hr
+h4= "Ответы"
 .answers
   - if @question.answers
       table class="table-answers"
         == render @question.answers
-
+  - else
+    h4= "У вопроса нет ответов"
+hr
+h2= "Дать ответ на вопрос"
 == render 'answers/new', resource: @question
 
 

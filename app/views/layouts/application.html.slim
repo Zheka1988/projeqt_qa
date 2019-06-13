@@ -4,8 +4,10 @@ html
     title ProjectQa
     = csrf_meta_tags
     = csp_meta_tag
+    = include_gon
 
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = action_cable_meta_tag
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
 
   body

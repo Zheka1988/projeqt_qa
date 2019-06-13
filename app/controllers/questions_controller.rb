@@ -3,6 +3,9 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :edit, :update, :destroy ]
+  before_action :gon_question, only: [:show]
+
+  after_action :publish_question, only: [:create]
 
   def index
     @questions = Question.all
@@ -11,7 +14,7 @@ class QuestionsController < ApplicationController
   def show
     @answer = Answer.new
     @answer.links.new
-
+    @commentable = @question
   end
 
   def new
@@ -58,7 +61,26 @@ class QuestionsController < ApplicationController
     @question = Question.find(params[:id])
   end
 
+  def publish_question
+    return if @question.errors.any?
+    ActionCable.server.broadcast(
+      'questions',
+      ApplicationController.render(
+        partial: 'questions/question',
+        locals: { question: @question , current_user: nil}
+        # json: { title: @question.title, body: @question.body }
+        )
+        #схема другая: отправляем не паршл,
+        # а данные в json, а на клиенте из них строим уже нужный html
+        # тут может быть полезен как раз шаблонизатор типа skim или подобный,
+        #который на стороне js работает
+
+
+    )
+  end
+  def gon_question
+    gon.question_id = @question.id
+  end
+
 end
-
-
 
